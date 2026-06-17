@@ -19,8 +19,7 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .tab-btn:hover { color:#FFD700; background:rgba(255,215,0,0.08); }
 .tab-btn.active { color:#0a0f1e; background:#FFD700; }
 .tab-icon { display:block; font-size:18px; margin-bottom:3px; }
-.panel { display:none; }
-.panel.active { display:block; }
+.panel { display:none; } .panel.active { display:block; }
 .card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,215,0,0.2); border-radius:16px; padding:22px; margin-bottom:14px; }
 .card-title { font-size:16px; font-weight:800; color:#FFD700; margin-bottom:14px; display:block; }
 .sect { font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1.5px; margin-bottom:10px; display:block; }
@@ -33,7 +32,9 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 .big-q { font-size:22px; font-weight:800; text-align:center; line-height:1.5; padding:16px; color:#fff; }
 .timer-wrap { text-align:center; margin:10px 0; }
-.timer-num { display:inline-block; width:64px; height:64px; border-radius:50%; line-height:64px; font-size:26px; font-weight:900; color:#FFD700; border:3px solid rgba(255,215,0,0.4); }
+.timer-num { display:inline-block; width:64px; height:64px; border-radius:50%; line-height:64px; font-size:26px; font-weight:900; color:#FFD700; border:3px solid rgba(255,215,0,0.4); transition:color 0.3s; }
+.timer-num.urgent { color:#ff5252; border-color:#ff5252; animation:urgentPulse 0.5s infinite; }
+@keyframes urgentPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
 .options-list { list-style:none; }
 .opt-item { padding:12px 18px; margin-bottom:8px; border-radius:10px; border:2px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.04); font-size:15px; font-weight:600; }
 .opt-item.correct { border-color:#00e676; background:rgba(0,230,118,0.15); color:#00e676; }
@@ -42,13 +43,13 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .rcnt { font-size:12px; color:rgba(255,255,255,0.5); margin-top:3px; }
 .btn-gold { display:block; width:100%; padding:13px; background:linear-gradient(135deg,#FFD700,#FFA000); color:#0a0f1e; border:none; border-radius:10px; font-size:15px; font-weight:800; cursor:pointer; margin-top:14px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .btn-gold:hover { opacity:0.85; }
-.btn-green { display:block; width:100%; padding:16px; background:linear-gradient(135deg,#00e676,#00897b); color:#fff; border:none; border-radius:12px; font-size:18px; font-weight:900; cursor:pointer; margin-top:14px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; letter-spacing:1px; }
+.btn-green { display:block; width:100%; padding:16px; background:linear-gradient(135deg,#00e676,#00897b); color:#fff; border:none; border-radius:12px; font-size:18px; font-weight:900; cursor:pointer; margin-top:14px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .btn-green:hover { opacity:0.85; }
 .btn-outline { display:inline-block; padding:9px 18px; background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.2); border-radius:8px; font-size:13px; cursor:pointer; margin-top:8px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .sc-row { display:table; width:100%; margin-bottom:10px; table-layout:fixed; }
 .sc-rank { display:table-cell; width:36px; font-size:18px; vertical-align:middle; text-align:center; }
 .sc-name { display:table-cell; font-weight:700; font-size:14px; vertical-align:middle; padding-left:6px; }
-.sc-bar-cell { display:table-cell; width:52%; vertical-align:middle; padding:0 10px; }
+.sc-bar-cell { display:table-cell; width:50%; vertical-align:middle; padding:0 10px; }
 .sc-bar { height:10px; border-radius:5px; background:linear-gradient(90deg,#FFD700,#FFA000); transition:width 1s ease; }
 .sc-pts { display:table-cell; width:55px; text-align:right; color:#FFD700; font-weight:800; font-size:14px; vertical-align:middle; }
 .vi { margin-bottom:12px; }
@@ -77,15 +78,18 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .setup-input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); border-radius:10px; color:#fff; font-size:14px; outline:none; margin-bottom:10px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .setup-input:focus { border-color:#FFD700; }
 .err-box { background:rgba(255,82,82,0.15); border:1px solid #ff5252; border-radius:10px; padding:12px 16px; margin-bottom:14px; font-size:13px; color:#ff8a80; display:none; }
-/* LOBBY */
-.lobby-box { text-align:center; padding:30px 20px; }
-.lobby-box h2 { font-size:22px; font-weight:900; color:#FFD700; margin-bottom:8px; }
-.lobby-box p { color:rgba(255,255,255,0.5); font-size:13px; margin-bottom:20px; }
-.player-list { display:block; margin:16px 0; min-height:60px; }
+.lobby-box { text-align:center; padding:20px 10px; }
+.lobby-box h2 { font-size:20px; font-weight:900; color:#FFD700; margin-bottom:8px; }
+.lobby-box p { color:rgba(255,255,255,0.5); font-size:13px; margin-bottom:16px; }
+.player-list { display:block; margin:12px 0; min-height:50px; }
 .player-chip { display:inline-block; background:rgba(255,215,0,0.12); border:1px solid rgba(255,215,0,0.3); border-radius:20px; padding:6px 14px; margin:4px; font-size:13px; font-weight:700; color:#FFD700; animation:popIn 0.3s ease; }
 @keyframes popIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
-.waiting-anim { font-size:28px; animation:spin 2s linear infinite; display:inline-block; }
+.waiting-anim { font-size:36px; animation:spin 3s linear infinite; display:inline-block; }
 @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+/* 최종 스코어 */
+.final-score-wrap { text-align:center; padding:10px 0; }
+.final-sc-row { display:table; width:100%; margin-bottom:12px; table-layout:fixed; padding:10px; border-radius:10px; background:rgba(255,255,255,0.04); }
+.final-sc-row.first { background:rgba(255,215,0,0.12); border:1px solid rgba(255,215,0,0.3); }
 </style>
 </head>
 <body>
@@ -94,14 +98,11 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 
   <!-- SETUP -->
   <div id="setup-screen">
-    <div class="header">
-      <h1>🏆 FIL2 WORLD CUP SLIDES</h1>
-      <p>HOST 대시보드</p>
-    </div>
+    <div class="header"><h1>🏆 FIL2 WORLD CUP SLIDES</h1><p>HOST 대시보드</p></div>
     <div id="err-box" class="err-box"></div>
     <div class="setup-box">
       <h2>🔧 세션 만들기</h2>
-      <p>방 이름을 입력하고 세션을 시작하세요.<br>팀원들이 참여하면 게임을 시작할 수 있습니다.</p>
+      <p>방 이름을 입력하고 세션을 시작하세요.</p>
       <input class="setup-input" id="room-input" type="text" placeholder="방 이름 (예: FIL2-2026)" maxlength="20">
       <button class="btn-gold" id="start-btn">🚀 세션 만들기</button>
     </div>
@@ -109,40 +110,29 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 
   <!-- LOBBY -->
   <div id="lobby-screen" style="display:none;">
-    <div class="header">
-      <h1>🏆 FIL2 WORLD CUP SLIDES</h1>
-      <p id="lobby-room-label">대기 중...</p>
-    </div>
-
-    <!-- 게임 시작 버튼 - 최상단 강조 -->
+    <div class="header"><h1>🏆 FIL2 WORLD CUP SLIDES</h1><p id="lobby-room-label">대기 중...</p></div>
     <div class="card" style="border-color:rgba(0,230,118,0.5);background:rgba(0,230,118,0.06);text-align:center;">
-      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:8px;">팀원이 모두 입장했으면 시작하세요</div>
-      <button class="btn-green" id="game-start-btn" style="font-size:20px;padding:18px;">🟢 게임 시작!</button>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:10px;">팀원이 모두 입장하면 시작하세요!</div>
+      <button class="btn-green" id="game-start-btn" style="font-size:20px;padding:18px;margin-top:0;">🟢 게임 시작!</button>
     </div>
-
-    <!-- 참여자 현황 -->
     <div class="card">
       <div class="lobby-box">
         <div class="waiting-anim">⚽</div>
-        <h2 style="margin-top:12px;">참여자 현황</h2>
-        <p>팀원들이 player.html 에서 방 이름을 입력하면<br>아래에 표시됩니다</p>
+        <h2 style="margin-top:10px;">참여자 현황</h2>
+        <p>player.html 에서 방 이름을 입력하면 표시됩니다</p>
         <div class="player-list" id="player-list"><span style="color:rgba(255,255,255,0.2);font-size:13px;">아직 참여자 없음</span></div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px;"><span id="lobby-count">0</span>명 대기 중</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:6px;"><span id="lobby-count">0</span>명 대기 중</div>
       </div>
     </div>
-
     <div class="card" style="text-align:center;">
       <span class="sect">참여자 접속 URL</span>
-      <div style="font-size:13px;color:#FFD700;word-break:break-all;padding:8px 0;" id="player-url"></div>
+      <div style="font-size:12px;color:#FFD700;word-break:break-all;padding:6px 0;" id="player-url"></div>
     </div>
   </div>
 
   <!-- MAIN -->
   <div id="main-screen" style="display:none;">
-    <div class="header">
-      <h1>🏆 FIL2 WORLD CUP SLIDES</h1>
-      <p id="room-label">HOST</p>
-    </div>
+    <div class="header"><h1>🏆 FIL2 WORLD CUP SLIDES</h1><p id="room-label">HOST</p></div>
     <div class="status-bar">
       <div class="st-cell"><span class="status-dot"></span><span style="font-size:13px;color:rgba(255,255,255,0.6);">참여자 </span><span class="cnt-badge" id="user-count">0명</span></div>
       <div class="st-cell right" id="room-code-label"></div>
@@ -156,7 +146,7 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 
     <div id="panel-quiz" class="panel active">
       <div class="card">
-        <span class="sect">⚽ 퀴즈 — Q<span id="q-num">1</span>/<span id="q-tot">3</span></span>
+        <span class="sect">⚽ 퀴즈 — Q<span id="q-num">1</span>/<span id="q-tot">5</span></span>
         <div class="big-q" id="q-text"></div>
         <div class="timer-wrap"><div class="timer-num" id="timer">7</div></div>
         <ul class="options-list" id="q-options"></ul>
@@ -209,187 +199,275 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 var DB = "https://fil2-worldcup-default-rtdb.firebaseio.com";
 var BASE_URL = "https://stdotjohn-art.github.io/fil2-worldcup";
 
-function dbSet(path, data, cb) {
-  fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
-    .then(function(r){return r.json();}).then(function(d){if(cb)cb(null,d);}).catch(function(e){if(cb)cb(e);});
-}
-function dbGet(path, cb) {
-  fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){cb(null,d);}).catch(function(e){cb(e);});
-}
-function dbPush(path, data) {
-  fetch(DB+"/"+path+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});
-}
-function dbRemove(path) {
-  fetch(DB+"/"+path+".json",{method:"DELETE"}).catch(function(){});
-}
-function dbTx(path, fn) {
-  dbGet(path, function(err,cur){ dbSet(path, fn(cur)); });
-}
-function dbListen(path, cb) {
-  var last = null;
-  function poll() {
-    fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){
-      var s=JSON.stringify(d); if(s!==last){last=s;cb(d);}
-    }).catch(function(){});
-  }
-  poll();
-  return setInterval(poll, 2000);
-}
+function dbSet(path,data,cb){fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).then(function(r){return r.json();}).then(function(d){if(cb)cb(null,d);}).catch(function(e){if(cb)cb(e);});}
+function dbGet(path,cb){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){cb(null,d);}).catch(function(e){cb(e);});}
+function dbRemove(path){fetch(DB+"/"+path+".json",{method:"DELETE"}).catch(function(){});}
+function dbTx(path,fn){dbGet(path,function(err,cur){dbSet(path,fn(cur));});}
+function dbListen(path,cb){var last=null;function poll(){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){var s=JSON.stringify(d);if(s!==last){last=s;cb(d);}}).catch(function(){});}poll();return setInterval(poll,2000);}
 
 var quizData = [
   { q:"2026 월드컵 개최국은?", options:["브라질","미국/캐나다/멕시코","독일","일본"], answer:1 },
+  { q:"FIFA 월드컵 최다 우승국은?", options:["독일","아르헨티나","브라질","프랑스"], answer:2 },
   { q:"FIL2 팀의 핵심 역할은?", options:["SSD 펌웨어 개발","AI 모델 트레이닝","웹 백엔드","하드웨어 설계"], answer:0 },
-  { q:"다음 월드컵 우승 후보는?", options:["프랑스","영국","포르투갈","스페인"], answer:2 }
+  { q:"NVMe의 N은 무엇의 약자?", options:["Network","Non-Volatile","Next","Native"], answer:1 },
+  { q:"[넌센스] 축구공이 바다에 빠지면?", options:["수구가 된다","공이 젖는다","골키퍼가 운다","득점 무효"], answer:0, nonsense:true }
 ];
-var voteOptions = [
-  {name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},
-  {name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},
-  {name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}
-];
-var wc_colors = ["#FFD700","#00e676","#2196F3","#FF6B35","#ab47bc","#26c6da","#f48fb1","#80cbc4"];
-var wc_sizes  = [14,18,22,28,34,40];
-var roomId="", currentQ=0, timerVal=20, timerInt=null;
+var voteOptions=[{name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},{name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},{name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}];
+var wc_colors=["#FFD700","#00e676","#2196F3","#FF6B35","#ab47bc","#26c6da","#f48fb1","#80cbc4"];
+var wc_sizes=[14,18,22,28,34,40];
+var roomId="",currentQ=0,timerVal=7,timerInt=null;
+var audioCtx=null;
 
-document.getElementById("start-btn").addEventListener("click", createSession);
-document.getElementById("game-start-btn").addEventListener("click", startGame);
-document.getElementById("tab-quiz").addEventListener("click", function(){ switchTab("quiz"); });
-document.getElementById("tab-vote").addEventListener("click", function(){ switchTab("vote"); });
-document.getElementById("tab-wordcloud").addEventListener("click", function(){ switchTab("wordcloud"); });
-document.getElementById("tab-qa").addEventListener("click", function(){ switchTab("qa"); });
+// ── Web Audio 긴장감 음악 ─────────────────────────────────────
+function initAudio(){
+  if(audioCtx) return;
+  try{ audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+}
 
-// ── 1단계: 세션 생성 → 로비 ─────────────────────────────────
-function createSession() {
-  var v = document.getElementById("room-input").value.trim();
-  if (!v) { showErr("방 이름을 입력하세요"); return; }
-  roomId = v.replace(/[^a-zA-Z0-9_-]/g,"_");
+var beatInt=null;
+var beatCount=0;
 
-  // 기존 방 데이터 완전 삭제 후 새로 시작
-  fetch(DB+"/rooms/"+roomId+".json", {method:"DELETE"})
-    .then(function() {
-      var iv = {};
-      for (var i=0;i<voteOptions.length;i++) iv[voteOptions[i].name]=0;
-      return fetch(DB+"/rooms/"+roomId+"/meta.json",{
-        method:"PUT",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({gameStarted:false, created:Date.now()})
-      });
+function startQuizMusic(seconds){
+  initAudio();
+  if(!audioCtx) return;
+  stopQuizMusic();
+  beatCount=0;
+  var bpm=120;
+  var interval=60000/bpm;
+
+  function playBeat(){
+    var now=audioCtx.currentTime;
+    // kick
+    var osc=audioCtx.createOscillator();
+    var gain=audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(150,now);
+    osc.frequency.exponentialRampToValueAtTime(40,now+0.1);
+    gain.gain.setValueAtTime(0.4,now);
+    gain.gain.exponentialRampToValueAtTime(0.001,now+0.15);
+    osc.start(now); osc.stop(now+0.15);
+
+    // hi-hat
+    var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.15;
+    var src=audioCtx.createBufferSource();
+    src.buffer=buf;
+    var hgain=audioCtx.createGain();
+    src.connect(hgain); hgain.connect(audioCtx.destination);
+    hgain.gain.setValueAtTime(0.2,now+0.01);
+    hgain.gain.exponentialRampToValueAtTime(0.001,now+0.05);
+    src.start(now+0.01);
+
+    beatCount++;
+    // 남은 시간에 따라 템포 증가
+    var remaining=seconds-Math.floor(beatCount*(interval/1000));
+    if(remaining<=3 && remaining>0){
+      // 긴장감 고조: 추가 톤
+      var t=audioCtx.createOscillator();
+      var tg=audioCtx.createGain();
+      t.connect(tg); tg.connect(audioCtx.destination);
+      t.type="square";
+      t.frequency.value=440+remaining*100;
+      tg.gain.setValueAtTime(0.05,now+0.2);
+      tg.gain.exponentialRampToValueAtTime(0.001,now+0.35);
+      t.start(now+0.2); t.stop(now+0.35);
+    }
+  }
+
+  playBeat();
+  // 남은 시간이 줄수록 빨라짐
+  function scheduleBeat(){
+    var elapsed=beatCount*(interval/1000);
+    var remaining=Math.max(0,seconds-elapsed);
+    var speed=remaining<=2?interval*0.5:remaining<=4?interval*0.7:interval;
+    beatInt=setTimeout(function(){
+      if(beatCount<seconds*2){
+        playBeat();
+        scheduleBeat();
+      }
+    },speed);
+  }
+  scheduleBeat();
+}
+
+function stopQuizMusic(){
+  if(beatInt){ clearTimeout(beatInt); beatInt=null; }
+  beatCount=0;
+}
+
+function playCorrectSound(){
+  initAudio(); if(!audioCtx) return;
+  var now=audioCtx.currentTime;
+  var freqs=[523,659,784];
+  for(var i=0;i<freqs.length;i++){
+    (function(f,t){
+      var o=audioCtx.createOscillator(); var g=audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.type="sine"; o.frequency.value=f;
+      g.gain.setValueAtTime(0.2,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+      o.start(t); o.stop(t+0.3);
+    })(freqs[i], now+i*0.12);
+  }
+}
+
+function playWrongSound(){
+  initAudio(); if(!audioCtx) return;
+  var now=audioCtx.currentTime;
+  var o=audioCtx.createOscillator(); var g=audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type="sawtooth"; o.frequency.value=200;
+  o.frequency.exponentialRampToValueAtTime(80,now+0.3);
+  g.gain.setValueAtTime(0.3,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.4);
+  o.start(now); o.stop(now+0.4);
+}
+
+function playFinalSound(){
+  initAudio(); if(!audioCtx) return;
+  var now=audioCtx.currentTime;
+  var melody=[523,523,523,392,523,659,784];
+  var times=[0,0.2,0.4,0.5,0.6,0.8,1.0];
+  for(var i=0;i<melody.length;i++){
+    (function(f,t){
+      var o=audioCtx.createOscillator(); var g=audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.type="sine"; o.frequency.value=f;
+      g.gain.setValueAtTime(0.25,now+t); g.gain.exponentialRampToValueAtTime(0.001,now+t+0.18);
+      o.start(now+t); o.stop(now+t+0.2);
+    })(melody[i],times[i]);
+  }
+}
+
+// ── Buttons ───────────────────────────────────────────────────
+document.getElementById("start-btn").addEventListener("click",createSession);
+document.getElementById("game-start-btn").addEventListener("click",startGame);
+document.getElementById("tab-quiz").addEventListener("click",function(){switchTab("quiz");});
+document.getElementById("tab-vote").addEventListener("click",function(){switchTab("vote");});
+document.getElementById("tab-wordcloud").addEventListener("click",function(){switchTab("wordcloud");});
+document.getElementById("tab-qa").addEventListener("click",function(){switchTab("qa");});
+
+// ── Session ───────────────────────────────────────────────────
+function createSession(){
+  var v=document.getElementById("room-input").value.trim();
+  if(!v){showErr("방 이름을 입력하세요");return;}
+  roomId=v.replace(/[^a-zA-Z0-9_-]/g,"_");
+  fetch(DB+"/rooms/"+roomId+".json",{method:"DELETE"})
+    .then(function(){
+      return fetch(DB+"/rooms/"+roomId+"/meta.json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({gameStarted:false,created:Date.now()})});
     })
-    .then(function(r){ return r.json(); })
-    .then(function() {
-      var iv2={};
-      for(var i=0;i<voteOptions.length;i++) iv2[voteOptions[i].name]=0;
-      dbSet("rooms/"+roomId+"/vote", iv2);
-      // 로비 화면으로
-      document.getElementById("setup-screen").style.display = "none";
-      document.getElementById("lobby-screen").style.display = "block";
-      document.getElementById("lobby-room-label").textContent = "방: " + roomId + " | 참여자 대기 중...";
-      var pUrl = BASE_URL + "/player.html?room=" + encodeURIComponent(roomId);
-      document.getElementById("player-url").textContent = pUrl;
-      // 참여자 실시간 감지
-      dbListen("rooms/"+roomId+"/users", function(d) {
-        var players = d ? Object.keys(d) : [];
-        document.getElementById("lobby-count").textContent = players.length;
-        var list = document.getElementById("player-list");
-        list.innerHTML = "";
-        if (players.length === 0) {
-          list.innerHTML = "<span style='color:rgba(255,255,255,0.2);font-size:13px;'>아직 참여자 없음</span>";
-        } else {
-          for (var i=0;i<players.length;i++) {
-            var chip = document.createElement("span");
-            chip.className = "player-chip";
-            chip.textContent = "👤 " + (d[players[i]].name || players[i]);
-            list.appendChild(chip);
-          }
+    .then(function(r){return r.json();})
+    .then(function(){
+      var iv={};for(var i=0;i<voteOptions.length;i++) iv[voteOptions[i].name]=0;
+      dbSet("rooms/"+roomId+"/vote",iv);
+      document.getElementById("setup-screen").style.display="none";
+      document.getElementById("lobby-screen").style.display="block";
+      document.getElementById("lobby-room-label").textContent="방: "+roomId+" | 참여자 대기 중...";
+      document.getElementById("player-url").textContent=BASE_URL+"/player.html?room="+encodeURIComponent(roomId);
+      dbListen("rooms/"+roomId+"/users",function(d){
+        var players=d?Object.keys(d):[];
+        document.getElementById("lobby-count").textContent=players.length;
+        var list=document.getElementById("player-list");
+        list.innerHTML="";
+        if(players.length===0){list.innerHTML="<span style='color:rgba(255,255,255,0.2);font-size:13px;'>아직 참여자 없음</span>";return;}
+        for(var i=0;i<players.length;i++){
+          var chip=document.createElement("span");chip.className="player-chip";
+          chip.textContent="👤 "+(d[players[i]].name||players[i]);list.appendChild(chip);
         }
       });
     })
-    .catch(function(e){ showErr("Firebase 오류: "+e.message); });
+    .catch(function(e){showErr("Firebase 오류: "+e.message);});
 }
 
-// ── 2단계: 호스트가 게임 시작 버튼 클릭 ────────────────────
-function startGame() {
-  dbSet("rooms/"+roomId+"/meta/gameStarted", true, function(err) {
-    if (err) { showToast("오류 발생!"); return; }
-    document.getElementById("lobby-screen").style.display = "none";
-    document.getElementById("main-screen").style.display = "block";
-    document.getElementById("room-label").textContent = "HOST | 방: " + roomId;
-    document.getElementById("room-code-label").textContent = "방 코드: " + roomId;
-    document.getElementById("next-q-btn").addEventListener("click", nextQ);
-    document.getElementById("reset-vote-btn").addEventListener("click", resetVote);
-    document.getElementById("clear-words-btn").addEventListener("click", clearWords);
+function startGame(){
+  initAudio();
+  dbSet("rooms/"+roomId+"/meta/gameStarted",true,function(err){
+    if(err){showToast("오류 발생!");return;}
+    document.getElementById("lobby-screen").style.display="none";
+    document.getElementById("main-screen").style.display="block";
+    document.getElementById("room-label").textContent="HOST | 방: "+roomId;
+    document.getElementById("room-code-label").textContent="방 코드: "+roomId;
+    document.getElementById("next-q-btn").addEventListener("click",nextQ);
+    document.getElementById("reset-vote-btn").addEventListener("click",resetVote);
+    document.getElementById("clear-words-btn").addEventListener("click",clearWords);
     listenAll();
     renderQuiz();
     showToast("🟢 게임 시작!");
   });
 }
 
-function listenAll() {
-  dbListen("rooms/"+roomId+"/users", function(d) {
-    document.getElementById("user-count").textContent = (d?Object.keys(d).length:0)+"명";
-  });
-  dbListen("rooms/"+roomId+"/vote",   function(d){ renderVoteBars(d); });
-  dbListen("rooms/"+roomId+"/words",  function(d){ renderWordCloud(d); });
-  dbListen("rooms/"+roomId+"/qa",     function(d){ renderQA(d); });
-  dbListen("rooms/"+roomId+"/scores", function(d){ renderScoreboard(d); });
+function listenAll(){
+  dbListen("rooms/"+roomId+"/users",function(d){document.getElementById("user-count").textContent=(d?Object.keys(d).length:0)+"명";});
+  dbListen("rooms/"+roomId+"/vote",function(d){renderVoteBars(d);});
+  dbListen("rooms/"+roomId+"/words",function(d){renderWordCloud(d);});
+  dbListen("rooms/"+roomId+"/qa",function(d){renderQA(d);});
+  dbListen("rooms/"+roomId+"/scores",function(d){renderScoreboard(d);});
 }
 
-function switchTab(tab) {
+function switchTab(tab){
   var tabs=["quiz","vote","wordcloud","qa"];
   for(var i=0;i<tabs.length;i++){
     var p=document.getElementById("panel-"+tabs[i]);
     var b=document.getElementById("tab-"+tabs[i]);
-    if(p) p.className="panel"+(tabs[i]===tab?" active":"");
-    if(b) b.className="tab-btn"+(tabs[i]===tab?" active":"");
+    if(p)p.className="panel"+(tabs[i]===tab?" active":"");
+    if(b)b.className="tab-btn"+(tabs[i]===tab?" active":"");
   }
 }
 
-function renderQuiz() {
+// ── Quiz ─────────────────────────────────────────────────────
+function renderQuiz(){
   var q=quizData[currentQ];
   document.getElementById("q-num").textContent=currentQ+1;
   document.getElementById("q-tot").textContent=quizData.length;
-  document.getElementById("q-text").textContent=q.q;
-  var ul=document.getElementById("q-options"); ul.innerHTML="";
+  document.getElementById("q-text").textContent=(q.nonsense?"🤪 [넌센스] ":"")+q.q;
+  var ul=document.getElementById("q-options");ul.innerHTML="";
   var labels=["A","B","C","D"];
   for(var i=0;i<q.options.length;i++){
     var li=document.createElement("li");
     li.className="opt-item"+(i===q.answer?" correct":"");
-    var sp=document.createElement("span");
-    sp.style.cssText="font-weight:900;color:#FFD700;margin-right:10px;";
-    sp.textContent=labels[i]; li.appendChild(sp);
-    li.appendChild(document.createTextNode(q.options[i]));
-    ul.appendChild(li);
+    var sp=document.createElement("span");sp.style.cssText="font-weight:900;color:#FFD700;margin-right:10px;";
+    sp.textContent=labels[i];li.appendChild(sp);li.appendChild(document.createTextNode(q.options[i]));ul.appendChild(li);
   }
   document.getElementById("q-result").style.display="none";
   dbRemove("rooms/"+roomId+"/quiz/answers/"+currentQ);
-  dbSet("rooms/"+roomId+"/quiz/current",{qIdx:currentQ,open:true,showResult:false,question:q.q,options:q.options,answer:q.answer});
-  dbListen("rooms/"+roomId+"/quiz/answers/"+currentQ, renderAnswerBars);
+  dbSet("rooms/"+roomId+"/quiz/current",{qIdx:currentQ,open:true,showResult:false,question:(q.nonsense?"🤪 [넌센스] ":"")+q.q,options:q.options,answer:q.answer});
+  dbListen("rooms/"+roomId+"/quiz/answers/"+currentQ,renderAnswerBars);
   startTimer();
+  startQuizMusic(7);
 }
 
-function startTimer() {
-  clearInterval(timerInt); timerVal=7;
-  document.getElementById("timer").textContent=timerVal;
+function startTimer(){
+  clearInterval(timerInt);timerVal=7;
+  var el=document.getElementById("timer");
+  el.textContent=timerVal;el.className="timer-num";
   dbSet("rooms/"+roomId+"/quiz/timer",timerVal);
   timerInt=setInterval(function(){
     timerVal--;
-    var el=document.getElementById("timer"); if(el) el.textContent=timerVal;
+    var el2=document.getElementById("timer");
+    if(el2){
+      el2.textContent=timerVal;
+      if(timerVal<=3) el2.className="timer-num urgent";
+    }
     dbSet("rooms/"+roomId+"/quiz/timer",timerVal);
-    if(timerVal<=0){clearInterval(timerInt);closeQuiz();}
+    if(timerVal<=0){clearInterval(timerInt);stopQuizMusic();closeQuiz();}
   },1000);
 }
 
-function closeQuiz() {
+function closeQuiz(){
+  stopQuizMusic();
   dbSet("rooms/"+roomId+"/quiz/current/open",false);
   dbSet("rooms/"+roomId+"/quiz/current/showResult",true);
   document.getElementById("q-result").style.display="block";
+  // 마지막 문제면 팡파레
+  if(currentQ===quizData.length-1) setTimeout(playFinalSound,500);
+
   dbGet("rooms/"+roomId+"/quiz/answers/"+currentQ,function(err,data){
     if(!data) return;
     var q=quizData[currentQ];
     dbGet("rooms/"+roomId+"/scores",function(err2,scores){
       scores=scores||{};
       for(var uid in data){
-        if(!scores[uid]) scores[uid]={name:data[uid].name||"익명",pts:0};
-        if(data[uid].answer===q.answer) scores[uid].pts+=100;
+        if(!scores[uid])scores[uid]={name:data[uid].name||"익명",pts:0};
+        if(data[uid].answer===q.answer)scores[uid].pts+=100;
       }
       dbSet("rooms/"+roomId+"/scores",scores);
     });
@@ -401,103 +479,94 @@ function nextQ(){
   renderQuiz();
 }
 
-function renderAnswerBars(data) {
-  var bars=document.getElementById("q-result-bars"); if(!bars) return;
+function renderAnswerBars(data){
+  var bars=document.getElementById("q-result-bars");if(!bars)return;
   var q=quizData[currentQ];
   var counts=[0,0,0,0];
   if(data){for(var uid in data){var a=data[uid].answer;if(a>=0&&a<4)counts[a]++;}}
   var total=counts.reduce(function(a,b){return a+b;},0)||1;
-  var labels=["A","B","C","D"]; bars.innerHTML="";
+  var labels=["A","B","C","D"];bars.innerHTML="";
   for(var i=0;i<q.options.length;i++){
     var pct=Math.round((counts[i]/total)*100);
-    var div=document.createElement("div"); div.style.marginBottom="10px";
-    var lbl=document.createElement("div"); lbl.style.cssText="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px;";
+    var div=document.createElement("div");div.style.marginBottom="10px";
+    var lbl=document.createElement("div");lbl.style.cssText="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px;";
     lbl.textContent=labels[i]+". "+q.options[i]+(i===q.answer?" ★":"");
-    var bw=document.createElement("div"); bw.className="rbar-wrap";
-    var bf=document.createElement("div"); bf.className="rbar-fill";
+    var bw=document.createElement("div");bw.className="rbar-wrap";
+    var bf=document.createElement("div");bf.className="rbar-fill";
     bf.style.width=pct+"%";
     bf.style.background=i===q.answer?"linear-gradient(90deg,#00e676,#00897b)":"linear-gradient(90deg,#FFD700,#FFA000)";
     bw.appendChild(bf);
-    var cnt=document.createElement("div"); cnt.className="rcnt"; cnt.textContent=counts[i]+"명 ("+pct+"%)";
-    div.appendChild(lbl); div.appendChild(bw); div.appendChild(cnt); bars.appendChild(div);
+    var cnt=document.createElement("div");cnt.className="rcnt";cnt.textContent=counts[i]+"명 ("+pct+"%)";
+    div.appendChild(lbl);div.appendChild(bw);div.appendChild(cnt);bars.appendChild(div);
   }
 }
 
-function renderScoreboard(data) {
-  var el=document.getElementById("scoreboard"); if(!el||!data) return;
-  var arr=[]; for(var uid in data) arr.push(data[uid]);
+function renderScoreboard(data){
+  var el=document.getElementById("scoreboard");if(!el||!data)return;
+  var arr=[];for(var uid in data)arr.push(data[uid]);
   arr.sort(function(a,b){return b.pts-a.pts;});
-  var medals=["🥇","🥈","🥉","4","5","6","7","8"]; var maxPts=arr[0]?arr[0].pts:1;
+  var medals=["🥇","🥈","🥉","4","5","6","7","8"];
+  var maxPts=arr[0]?arr[0].pts:1;
   el.innerHTML="";
   for(var i=0;i<arr.length&&i<8;i++){
     var pct=Math.round((arr[i].pts/maxPts)*100);
-    var row=document.createElement("div"); row.className="sc-row";
+    var row=document.createElement("div");row.className="sc-row";
     row.innerHTML="<div class='sc-rank'>"+(medals[i]||i+1)+"</div><div class='sc-name'>"+(arr[i].name||"익명")+"</div><div class='sc-bar-cell'><div class='sc-bar' style='width:"+pct+"%'></div></div><div class='sc-pts'>"+arr[i].pts+"pt</div>";
     el.appendChild(row);
   }
 }
 
-function renderVoteBars(data) {
-  var el=document.getElementById("vote-bars"); if(!el) return;
-  data=data||{}; var total=0;
-  for(var i=0;i<voteOptions.length;i++) total+=(data[voteOptions[i].name]||0);
-  if(!total) total=1; el.innerHTML="";
+function renderVoteBars(data){
+  var el=document.getElementById("vote-bars");if(!el)return;
+  data=data||{};var total=0;
+  for(var i=0;i<voteOptions.length;i++)total+=(data[voteOptions[i].name]||0);
+  if(!total)total=1;el.innerHTML="";
   for(var i=0;i<voteOptions.length;i++){
-    var v=data[voteOptions[i].name]||0; var pct=Math.round((v/total)*100);
-    var div=document.createElement("div"); div.className="vi";
+    var v=data[voteOptions[i].name]||0;var pct=Math.round((v/total)*100);
+    var div=document.createElement("div");div.className="vi";
     div.innerHTML="<div class='vrow'><div class='vflag'>"+voteOptions[i].flag+"</div><div class='vname'>"+voteOptions[i].name+"</div><div class='vcnt'>"+v+"표</div></div><div class='vbar-wrap'><div class='vbar-fill' style='width:"+pct+"%'></div></div>";
     el.appendChild(div);
   }
 }
+function resetVote(){var d={};for(var i=0;i<voteOptions.length;i++)d[voteOptions[i].name]=0;dbSet("rooms/"+roomId+"/vote",d);dbRemove("rooms/"+roomId+"/voted");showToast("투표 초기화 완료!");}
 
-function resetVote() {
-  var d={}; for(var i=0;i<voteOptions.length;i++) d[voteOptions[i].name]=0;
-  dbSet("rooms/"+roomId+"/vote",d); dbRemove("rooms/"+roomId+"/voted");
-  showToast("투표 초기화 완료!");
-}
-
-function renderWordCloud(data) {
-  var el=document.getElementById("wc-display"); if(!el) return;
+function renderWordCloud(data){
+  var el=document.getElementById("wc-display");if(!el)return;
   if(!data){el.innerHTML="<span style='color:rgba(255,255,255,0.2);font-size:14px;'>참여자 단어 대기 중...</span>";return;}
-  var words=[]; for(var w in data) words.push({text:w,count:data[w]});
-  words.sort(function(a,b){return b.count-a.count;}); el.innerHTML="";
+  var words=[];for(var w in data)words.push({text:w,count:data[w]});
+  words.sort(function(a,b){return b.count-a.count;});el.innerHTML="";
   for(var i=0;i<words.length;i++){
-    var span=document.createElement("span"); span.className="wc-word";
-    span.textContent=words[i].text;
+    var span=document.createElement("span");span.className="wc-word";span.textContent=words[i].text;
     var si=Math.min(words[i].count-1,wc_sizes.length-1);
-    span.style.fontSize=wc_sizes[si]+"px"; span.style.color=wc_colors[i%wc_colors.length];
-    span.style.border="1px solid "+wc_colors[i%wc_colors.length]; el.appendChild(span);
+    span.style.fontSize=wc_sizes[si]+"px";span.style.color=wc_colors[i%wc_colors.length];
+    span.style.border="1px solid "+wc_colors[i%wc_colors.length];el.appendChild(span);
   }
 }
+function clearWords(){dbRemove("rooms/"+roomId+"/words");showToast("워드 클라우드 초기화!");}
 
-function clearWords(){ dbRemove("rooms/"+roomId+"/words"); showToast("워드 클라우드 초기화!"); }
-
-function renderQA(data) {
-  var el=document.getElementById("qa-list"); if(!el) return;
+function renderQA(data){
+  var el=document.getElementById("qa-list");if(!el)return;
   if(!data){el.innerHTML="<div style='color:rgba(255,255,255,0.3);font-size:13px;'>질문 대기 중...</div>";return;}
-  var arr=[]; for(var k in data) arr.push({key:k,d:data[k]});
-  arr.sort(function(a,b){
-    if(a.d.pinned&&!b.d.pinned) return -1; if(!a.d.pinned&&b.d.pinned) return 1;
-    return (b.d.likes||0)-(a.d.likes||0);
-  });
+  var arr=[];for(var k in data)arr.push({key:k,d:data[k]});
+  arr.sort(function(a,b){if(a.d.pinned&&!b.d.pinned)return -1;if(!a.d.pinned&&b.d.pinned)return 1;return(b.d.likes||0)-(a.d.likes||0);});
   el.innerHTML="";
   for(var i=0;i<arr.length;i++){
     (function(item){
-      var div=document.createElement("div"); div.className="qa-item"+(item.d.pinned?" pinned":"");
-      var td=document.createElement("div"); td.className="qa-text";
+      var div=document.createElement("div");div.className="qa-item"+(item.d.pinned?" pinned":"");
+      var td=document.createElement("div");td.className="qa-text";
       if(item.d.pinned){var b=document.createElement("span");b.className="pin-badge";b.textContent="📌 핀";td.appendChild(b);}
       td.appendChild(document.createTextNode(item.d.text));
-      var md=document.createElement("div"); md.className="qa-meta";
-      var ti=document.createElement("div"); ti.className="qa-time"; ti.textContent=(item.d.name||"익명")+" · "+(item.d.time||"");
-      var ac=document.createElement("div"); ac.className="qa-acts";
-      var lb=document.createElement("button"); lb.className="qa-btn"; lb.textContent="❤ "+(item.d.likes||0);
+      var md=document.createElement("div");md.className="qa-meta";
+      var ti=document.createElement("div");ti.className="qa-time";ti.textContent=(item.d.name||"익명")+" · "+(item.d.time||"");
+      var ac=document.createElement("div");ac.className="qa-acts";
+      var lb=document.createElement("button");lb.className="qa-btn";lb.textContent="❤ "+(item.d.likes||0);
       lb.addEventListener("click",(function(k,l){return function(){dbSet("rooms/"+roomId+"/qa/"+k+"/likes",l+1);};})(item.key,item.d.likes||0));
-      var pb=document.createElement("button"); pb.className="qa-btn"; pb.textContent=item.d.pinned?"📌 해제":"📌 핀";
+      var pb=document.createElement("button");pb.className="qa-btn";pb.textContent=item.d.pinned?"📌 해제":"📌 핀";
       pb.addEventListener("click",(function(k,p){return function(){dbSet("rooms/"+roomId+"/qa/"+k+"/pinned",!p);};})(item.key,item.d.pinned));
-      var xb=document.createElement("button"); xb.className="qa-btn"; xb.textContent="🗑";
+      var xb=document.createElement("button");xb.className="qa-btn";xb.textContent="🗑";
       xb.addEventListener("click",(function(k){return function(){dbRemove("rooms/"+roomId+"/qa/"+k);};})(item.key));
-      ac.appendChild(lb); ac.appendChild(pb); ac.appendChild(xb);
-      md.appendChild(ti); md.appendChild(ac); div.appendChild(td); div.appendChild(md); el.appendChild(div);
+      ac.appendChild(lb);ac.appendChild(pb);ac.appendChild(xb);
+      md.appendChild(ti);md.appendChild(ac);div.appendChild(td);div.appendChild(md);el.appendChild(div);
     })(arr[i]);
   }
 }
