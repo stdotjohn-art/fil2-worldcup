@@ -19,12 +19,30 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .divider { height:1px; background:rgba(255,255,255,0.08); margin:14px 0; }
 .big-q { font-size:18px; font-weight:700; text-align:center; line-height:1.5; padding:12px 0; }
 .timer-wrap { text-align:center; margin:10px 0; }
-.timer-num { display:inline-block; width:56px; height:56px; border-radius:50%; line-height:56px; font-size:24px; font-weight:900; color:#FFD700; border:3px solid rgba(255,215,0,0.4); }
+.timer-num { display:inline-block; width:56px; height:56px; border-radius:50%; line-height:56px; font-size:24px; font-weight:900; color:#FFD700; border:3px solid rgba(255,215,0,0.4); transition:color 0.3s; }
+.timer-num.urgent { color:#ff5252; border-color:#ff5252; animation:urgentPulse 0.5s infinite; }
+@keyframes urgentPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
 .opt-btn { display:block; width:100%; padding:14px 18px; margin-bottom:10px; border-radius:12px; border:2px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#fff; font-size:15px; font-weight:600; cursor:pointer; text-align:left; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .opt-btn:hover { border-color:#FFD700; background:rgba(255,215,0,0.1); }
 .opt-btn.correct { border-color:#00e676; background:rgba(0,230,118,0.15); color:#00e676; }
 .opt-btn.wrong   { border-color:#ff5252; background:rgba(255,82,82,0.15); color:#ff5252; }
+.opt-btn:disabled { cursor:default; }
 .opt-label { display:inline-block; width:26px; height:26px; border-radius:50%; background:rgba(255,215,0,0.2); color:#FFD700; font-weight:900; font-size:12px; text-align:center; line-height:26px; margin-right:10px; }
+/* 결과 화면 */
+.result-overlay { text-align:center; padding:20px 10px; }
+.result-icon { font-size:56px; display:block; margin-bottom:8px; animation:popIn 0.4s ease; }
+@keyframes popIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+.result-msg { font-size:22px; font-weight:900; margin-bottom:6px; }
+.result-sub { font-size:13px; color:rgba(255,255,255,0.5); margin-bottom:16px; }
+/* 스코어 */
+.sc-row { display:table; width:100%; margin-bottom:8px; table-layout:fixed; }
+.sc-rank { display:table-cell; width:32px; font-size:16px; vertical-align:middle; text-align:center; }
+.sc-name { display:table-cell; font-weight:700; font-size:13px; vertical-align:middle; padding-left:6px; }
+.sc-bar-cell { display:table-cell; width:48%; vertical-align:middle; padding:0 8px; }
+.sc-bar { height:8px; border-radius:4px; background:linear-gradient(90deg,#FFD700,#FFA000); transition:width 1s ease; }
+.sc-pts { display:table-cell; width:50px; text-align:right; color:#FFD700; font-weight:800; font-size:13px; vertical-align:middle; }
+.sc-me { background:rgba(255,215,0,0.1); border-radius:8px; }
+/* vote */
 .vote-btn { display:block; width:100%; padding:13px; margin-bottom:10px; border-radius:12px; border:2px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#fff; font-size:15px; font-weight:700; cursor:pointer; text-align:center; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .vote-btn:hover { border-color:#2196F3; background:rgba(33,150,243,0.12); }
 .vote-btn.voted { border-color:#00BCD4; background:rgba(0,188,212,0.2); color:#00BCD4; }
@@ -46,8 +64,7 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .tab-btn { display:table-cell; text-align:center; padding:11px 4px; cursor:pointer; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5); border:none; background:none; width:25%; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .tab-btn.active { color:#0a0f1e; background:#FFD700; }
 .tab-icon { display:block; font-size:16px; margin-bottom:2px; }
-.panel { display:none; }
-.panel.active { display:block; }
+.panel { display:none; } .panel.active { display:block; }
 .waiting { text-align:center; padding:30px; color:rgba(255,255,255,0.3); font-size:14px; }
 .spin { font-size:32px; animation:spin 2s linear infinite; display:block; margin-bottom:10px; }
 @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
@@ -55,7 +72,6 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .score-big .pts { font-size:44px; font-weight:900; color:#FFD700; }
 .score-big .lbl { font-size:12px; color:rgba(255,255,255,0.5); margin-top:2px; }
 .err-box { background:rgba(255,82,82,0.15); border:1px solid #ff5252; border-radius:10px; padding:12px 16px; margin-bottom:12px; font-size:13px; color:#ff8a80; display:none; }
-/* LOBBY WAITING */
 .lobby-wait { text-align:center; padding:40px 20px; }
 .lobby-wait h2 { font-size:20px; font-weight:900; color:#FFD700; margin:16px 0 8px; }
 .lobby-wait p { color:rgba(255,255,255,0.5); font-size:13px; line-height:1.7; }
@@ -70,7 +86,6 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 <div id="app">
   <div class="header"><h1>⚽ FIL2 WorldCup</h1><p id="room-label">참여자 화면</p></div>
 
-  <!-- JOIN -->
   <div id="join-screen">
     <div id="err-box" class="err-box"></div>
     <div class="setup-box">
@@ -82,7 +97,6 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
     </div>
   </div>
 
-  <!-- LOBBY WAIT (호스트가 시작 누를때까지 대기) -->
   <div id="lobby-wait-screen" style="display:none;">
     <div class="card">
       <div class="lobby-wait">
@@ -94,7 +108,6 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
     </div>
   </div>
 
-  <!-- MAIN -->
   <div id="main-screen" style="display:none;">
     <div class="score-big"><div class="pts" id="my-pts">0</div><div class="lbl">내 점수</div></div>
     <div class="tab-nav">
@@ -105,6 +118,10 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
     </div>
     <div id="panel-quiz" class="panel active">
       <div class="card" id="quiz-card"><div class="waiting"><span class="spin">⚽</span>퀴즈 대기 중...</div></div>
+      <div class="card" id="score-card" style="display:none;">
+        <span class="sect">🏅 현재 스코어</span>
+        <div id="player-scoreboard"></div>
+      </div>
     </div>
     <div id="panel-vote" class="panel">
       <div class="card">
@@ -144,23 +161,73 @@ function dbSet(path,data){fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Cont
 function dbGet(path,cb){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(cb).catch(function(){});}
 function dbPush(path,data){fetch(DB+"/"+path+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});}
 function dbTx(path,fn){dbGet(path,function(cur){dbSet(path,fn(cur));});}
-function dbListen(path,cb){
-  var last=null;
-  function poll(){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){var s=JSON.stringify(d);if(s!==last){last=s;cb(d);}}).catch(function(){});}
-  poll(); return setInterval(poll,2000);
-}
+function dbListen(path,cb){var last=null;function poll(){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){var s=JSON.stringify(d);if(s!==last){last=s;cb(d);}}).catch(function(){});}poll();return setInterval(poll,2000);}
 
-var voteOptions=[
-  {name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},
-  {name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},
-  {name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}
-];
+var voteOptions=[{name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},{name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},{name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}];
 var roomId="",myUid="",myName="",hasAnswered=false,hasVoted=false,lastQIdx=-1;
 var gameStartListenerInt=null;
+var audioCtx=null;
 
-function getParam(n){var m=window.location.search.match(new RegExp("[?&]"+n+"=([^&]*)"));return m?decodeURIComponent(m[1]):""; }
+// ── Web Audio ─────────────────────────────────────────────────
+function initAudio(){if(audioCtx)return;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+var beatInt=null,beatCount=0;
+
+function startQuizMusic(seconds){
+  initAudio();if(!audioCtx)return;
+  stopQuizMusic();beatCount=0;
+  var interval=500;
+  function playBeat(){
+    var now=audioCtx.currentTime;
+    var o=audioCtx.createOscillator();var g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);
+    o.frequency.setValueAtTime(150,now);o.frequency.exponentialRampToValueAtTime(40,now+0.08);
+    g.gain.setValueAtTime(0.35,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.12);
+    o.start(now);o.stop(now+0.12);
+    var buf=audioCtx.createBuffer(1,audioCtx.sampleRate*0.04,audioCtx.sampleRate);
+    var d=buf.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.12;
+    var src=audioCtx.createBufferSource();src.buffer=buf;
+    var hg=audioCtx.createGain();src.connect(hg);hg.connect(audioCtx.destination);
+    hg.gain.setValueAtTime(0.15,now+0.01);hg.gain.exponentialRampToValueAtTime(0.001,now+0.04);
+    src.start(now+0.01);
+    beatCount++;
+  }
+  function scheduleBeat(){
+    var elapsed=beatCount*(interval/1000);
+    var remaining=Math.max(0,seconds-elapsed);
+    var speed=remaining<=2?interval*0.4:remaining<=4?interval*0.65:interval;
+    beatInt=setTimeout(function(){
+      if(beatCount<seconds*3){playBeat();scheduleBeat();}
+    },speed);
+  }
+  playBeat();scheduleBeat();
+}
+
+function stopQuizMusic(){if(beatInt){clearTimeout(beatInt);beatInt=null;}beatCount=0;}
+
+function playResultSound(correct){
+  initAudio();if(!audioCtx)return;
+  var now=audioCtx.currentTime;
+  if(correct){
+    [523,659,784].forEach(function(f,i){
+      var o=audioCtx.createOscillator();var g=audioCtx.createGain();
+      o.connect(g);g.connect(audioCtx.destination);
+      o.type="sine";o.frequency.value=f;
+      g.gain.setValueAtTime(0.2,now+i*0.12);g.gain.exponentialRampToValueAtTime(0.001,now+i*0.12+0.25);
+      o.start(now+i*0.12);o.stop(now+i*0.12+0.3);
+    });
+  } else {
+    var o=audioCtx.createOscillator();var g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);
+    o.type="sawtooth";o.frequency.value=180;o.frequency.exponentialRampToValueAtTime(60,now+0.35);
+    g.gain.setValueAtTime(0.25,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.4);
+    o.start(now);o.stop(now+0.4);
+  }
+}
+
+// ── URL param ─────────────────────────────────────────────────
+function getParam(n){var m=window.location.search.match(new RegExp("[?&]"+n+"=([^&]*)"));return m?decodeURIComponent(m[1]):"";}
 var urlRoom=getParam("room");
-if(urlRoom) document.getElementById("join-room").value=urlRoom;
+if(urlRoom)document.getElementById("join-room").value=urlRoom;
 
 function makeUid(){return "u"+Date.now()+Math.floor(Math.random()*9999);}
 function showErr(msg){var e=document.getElementById("err-box");e.textContent=msg;e.style.display="block";}
@@ -180,33 +247,22 @@ function joinRoom(){
   var n=document.getElementById("join-name").value.trim();
   if(!r){showErr("방 이름을 입력하세요");return;}
   if(!n){showErr("닉네임을 입력하세요");return;}
-  roomId=r; myName=n; myUid=makeUid();
-
+  roomId=r;myName=n;myUid=makeUid();
   fetch(DB+"/rooms/"+roomId+"/meta.json")
     .then(function(res){return res.json();})
     .then(function(d){
-      if(!d){showErr("방을 찾을 수 없습니다. 방 이름을 확인하세요.");return;}
-      // 참여자 등록
+      if(!d){showErr("방을 찾을 수 없습니다.");return;}
       dbSet("rooms/"+roomId+"/users/"+myUid,{name:myName,joined:Date.now()});
       document.getElementById("join-screen").style.display="none";
       document.getElementById("room-label").textContent="방: "+roomId+" | "+myName;
-
       if(d.gameStarted){
-        // 이미 시작된 방
         enterGame();
       } else {
-        // 로비 대기
         document.getElementById("lobby-wait-screen").style.display="block";
         document.getElementById("wait-room-label").textContent="방: "+roomId+" · "+myName+"님 입장 완료";
         showToast("입장 완료! 호스트 시작을 기다려주세요 👋");
-        // 게임 시작 감지
-        gameStartListenerInt = dbListen("rooms/"+roomId+"/meta/gameStarted",function(val){
-          if(val===true){
-            clearInterval(gameStartListenerInt);
-            document.getElementById("lobby-wait-screen").style.display="none";
-            enterGame();
-            showToast("🟢 게임 시작!");
-          }
+        gameStartListenerInt=dbListen("rooms/"+roomId+"/meta/gameStarted",function(val){
+          if(val===true){clearInterval(gameStartListenerInt);document.getElementById("lobby-wait-screen").style.display="none";enterGame();showToast("🟢 게임 시작!");}
         });
       }
     })
@@ -214,6 +270,7 @@ function joinRoom(){
 }
 
 function enterGame(){
+  initAudio();
   document.getElementById("main-screen").style.display="block";
   renderVoteBtns();
   listenAll();
@@ -222,25 +279,35 @@ function enterGame(){
 function listenAll(){
   dbListen("rooms/"+roomId+"/quiz/current",onQuizUpdate);
   dbListen("rooms/"+roomId+"/quiz/timer",function(v){
-    var el=document.getElementById("p-timer"); if(el&&v!==null) el.textContent=v;
+    var el=document.getElementById("p-timer");
+    if(el&&v!==null){
+      el.textContent=v;
+      if(v<=3)el.className="timer-num urgent"; else el.className="timer-num";
+    }
   });
   dbListen("rooms/"+roomId+"/scores/"+myUid+"/pts",function(v){
-    if(v!==null) document.getElementById("my-pts").textContent=v;
+    if(v!==null)document.getElementById("my-pts").textContent=v;
   });
+  dbListen("rooms/"+roomId+"/scores",function(d){renderPlayerScoreboard(d);});
 }
 
 function onQuizUpdate(data){
-  if(!data) return;
-  var card=document.getElementById("quiz-card"); if(!card) return;
-  if(data.qIdx!==lastQIdx){lastQIdx=data.qIdx;hasAnswered=false;}
+  if(!data)return;
+  var card=document.getElementById("quiz-card");if(!card)return;
+  if(data.qIdx!==lastQIdx){lastQIdx=data.qIdx;hasAnswered=false;document.getElementById("score-card").style.display="none";}
+
   if(!data.open&&!data.showResult){
-    card.innerHTML="<div class='waiting'><span class='spin'>⚽</span>다음 퀴즈 대기 중...</div>"; return;
+    stopQuizMusic();
+    card.innerHTML="<div class='waiting'><span class='spin'>⚽</span>다음 퀴즈 대기 중...</div>";return;
   }
   if(data.open&&!hasAnswered){
+    stopQuizMusic();
+    startQuizMusic(7);
     card.innerHTML="";
-    var s=document.createElement("span");s.className="sect";s.textContent="⚽ 퀴즈 Q"+(data.qIdx+1);card.appendChild(s);
+    var s=document.createElement("span");s.className="sect";s.textContent="⚽ 퀴즈 Q"+(data.qIdx+1)+" / 5";card.appendChild(s);
     var q=document.createElement("div");q.className="big-q";q.textContent=data.question;card.appendChild(q);
-    var tw=document.createElement("div");tw.className="timer-wrap";tw.innerHTML="<div class='timer-num' id='p-timer'>7</div>";card.appendChild(tw);
+    var tw=document.createElement("div");tw.className="timer-wrap";
+    tw.innerHTML="<div class='timer-num' id='p-timer'>7</div>";card.appendChild(tw);
     var labels=["A","B","C","D"];
     for(var i=0;i<data.options.length;i++){
       (function(idx){
@@ -252,19 +319,73 @@ function onQuizUpdate(data){
       })(i);
     }
   }
+  // 타이머 끝나면 결과 표시 (showResult=true)
   if(!data.open&&data.showResult){
+    stopQuizMusic();
     var btns=card.querySelectorAll(".opt-btn");
-    for(var i=0;i<btns.length;i++){btns[i].disabled=true;if(i===data.answer)btns[i].className+=" correct";}
+    for(var i=0;i<btns.length;i++){
+      btns[i].disabled=true;
+      if(i===data.answer)btns[i].className+=" correct";
+      else if(btns[i].className.indexOf("selected")>-1) btns[i].className+=" wrong";
+    }
+    // 결과 오버레이 표시
+    showResultOverlay(card, hasAnswered, data.answer);
+    // 스코어 카드 표시
+    document.getElementById("score-card").style.display="block";
   }
 }
 
+function showResultOverlay(card, answered, correctIdx){
+  // 기존 오버레이 제거
+  var old=card.querySelector(".result-overlay");
+  if(old)old.parentNode.removeChild(old);
+  var div=document.createElement("div");div.className="result-overlay";
+  if(!answered){
+    div.innerHTML="<span class='result-icon'>⏰</span><div class='result-msg' style='color:#FFD700;'>시간 초과!</div><div class='result-sub'>다음엔 빠르게!</div>";
+  } else {
+    // answered 상태는 submitAnswer에서 이미 처리됨
+    return;
+  }
+  card.appendChild(div);
+}
+
 function submitAnswer(idx,qIdx,correct){
-  if(hasAnswered)return; hasAnswered=true;
+  if(hasAnswered)return;
+  hasAnswered=true;
+  stopQuizMusic();
   var btns=document.querySelectorAll(".opt-btn");
-  for(var i=0;i<btns.length;i++) btns[i].disabled=true;
-  if(btns[idx]) btns[idx].className+=(idx===correct?" correct":" wrong");
+  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  var isCorrect=(idx===correct);
+  if(btns[idx])btns[idx].className+=(isCorrect?" correct":" wrong");
+  if(btns[correct]&&!isCorrect)btns[correct].className+=" correct";
   dbSet("rooms/"+roomId+"/quiz/answers/"+qIdx+"/"+myUid,{answer:idx,name:myName,time:Date.now()});
-  showToast(idx===correct?"✅ 정답! 점수 획득!":"❌ 틀렸어요!");
+  playResultSound(isCorrect);
+
+  // 즉시 결과 표시
+  var card=document.getElementById("quiz-card");
+  var div=document.createElement("div");div.className="result-overlay";
+  if(isCorrect){
+    div.innerHTML="<span class='result-icon'>✅</span><div class='result-msg' style='color:#00e676;'>정답!</div><div class='result-sub'>+100점 획득!</div>";
+  } else {
+    div.innerHTML="<span class='result-icon'>❌</span><div class='result-msg' style='color:#ff5252;'>틀렸어요!</div><div class='result-sub'>다음 문제 파이팅!</div>";
+  }
+  card.appendChild(div);
+}
+
+function renderPlayerScoreboard(data){
+  var el=document.getElementById("player-scoreboard");if(!el||!data)return;
+  var arr=[];for(var uid in data)arr.push({uid:uid,name:data[uid].name||"익명",pts:data[uid].pts||0});
+  arr.sort(function(a,b){return b.pts-a.pts;});
+  var medals=["🥇","🥈","🥉","4","5","6","7","8"];
+  var maxPts=arr[0]?arr[0].pts:1;
+  el.innerHTML="";
+  for(var i=0;i<arr.length&&i<8;i++){
+    var pct=Math.round((arr[i].pts/maxPts)*100);
+    var row=document.createElement("div");
+    row.className="sc-row"+(arr[i].uid===myUid?" sc-me":"");
+    row.innerHTML="<div class='sc-rank'>"+(medals[i]||i+1)+"</div><div class='sc-name'>"+(arr[i].uid===myUid?"<b>"+arr[i].name+"</b>":arr[i].name)+"</div><div class='sc-bar-cell'><div class='sc-bar' style='width:"+pct+"%'></div></div><div class='sc-pts'>"+arr[i].pts+"pt</div>";
+    el.appendChild(row);
+  }
 }
 
 function renderVoteBtns(){
@@ -282,35 +403,33 @@ function renderVoteBtns(){
 }
 
 function castVote(idx){
-  if(hasVoted)return; hasVoted=true;
+  if(hasVoted)return;hasVoted=true;
   dbTx("rooms/"+roomId+"/vote/"+voteOptions[idx].name,function(cur){return(cur||0)+1;});
-  renderVoteBtns(); showToast("🗳 "+voteOptions[idx].name+"에 투표!");
+  renderVoteBtns();showToast("🗳 "+voteOptions[idx].name+"에 투표!");
 }
 
 function submitWord(){
-  var input=document.getElementById("wc-input");
-  var val=input.value.trim();
+  var input=document.getElementById("wc-input");var val=input.value.trim();
   if(!val){showToast("단어를 입력하세요");return;}
   if(val.length>10){showToast("10글자 이하로 입력하세요");return;}
   dbTx("rooms/"+roomId+"/words/"+val,function(cur){return(cur||0)+1;});
-  input.value=""; showToast("↑ \""+val+"\" 추가!");
+  input.value="";showToast("↑ \""+val+"\" 추가!");
 }
 
 function submitQA(){
-  var ta=document.getElementById("qa-input"); var val=ta.value.trim();
+  var ta=document.getElementById("qa-input");var val=ta.value.trim();
   if(!val){showToast("질문을 입력하세요");return;}
-  var now=new Date(); var ts=now.getHours()+":"+String(now.getMinutes()).padStart(2,"0");
+  var now=new Date();var ts=now.getHours()+":"+String(now.getMinutes()).padStart(2,"0");
   dbPush("rooms/"+roomId+"/qa",{text:val,name:myName,likes:0,pinned:false,time:ts});
-  ta.value=""; showToast("📨 질문 제출 완료!");
+  ta.value="";showToast("📨 질문 제출 완료!");
 }
 
 function switchTab(tab){
   var tabs=["quiz","vote","wordcloud","qa"];
   for(var i=0;i<tabs.length;i++){
-    var p=document.getElementById("panel-"+tabs[i]);
-    var b=document.getElementById("tab-"+tabs[i]);
-    if(p) p.className="panel"+(tabs[i]===tab?" active":"");
-    if(b) b.className="tab-btn"+(tabs[i]===tab?" active":"");
+    var p=document.getElementById("panel-"+tabs[i]);var b=document.getElementById("tab-"+tabs[i]);
+    if(p)p.className="panel"+(tabs[i]===tab?" active":"");
+    if(b)b.className="tab-btn"+(tabs[i]===tab?" active":"");
   }
 }
 </script>
