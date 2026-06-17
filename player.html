@@ -55,6 +55,12 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .score-big .pts { font-size:44px; font-weight:900; color:#FFD700; }
 .score-big .lbl { font-size:12px; color:rgba(255,255,255,0.5); margin-top:2px; }
 .err-box { background:rgba(255,82,82,0.15); border:1px solid #ff5252; border-radius:10px; padding:12px 16px; margin-bottom:12px; font-size:13px; color:#ff8a80; display:none; }
+/* LOBBY WAITING */
+.lobby-wait { text-align:center; padding:40px 20px; }
+.lobby-wait h2 { font-size:20px; font-weight:900; color:#FFD700; margin:16px 0 8px; }
+.lobby-wait p { color:rgba(255,255,255,0.5); font-size:13px; line-height:1.7; }
+.pulse-ball { font-size:56px; animation:pulseBall 1.5s ease-in-out infinite; display:block; }
+@keyframes pulseBall { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
 #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(255,215,0,0.95); color:#0a0f1e; padding:10px 20px; border-radius:20px; font-weight:800; font-size:13px; transition:transform 0.4s; z-index:9999; white-space:nowrap; }
 #toast.show { transform:translateX(-50%) translateY(0); }
 </style>
@@ -64,6 +70,7 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 <div id="app">
   <div class="header"><h1>⚽ FIL2 WorldCup</h1><p id="room-label">참여자 화면</p></div>
 
+  <!-- JOIN -->
   <div id="join-screen">
     <div id="err-box" class="err-box"></div>
     <div class="setup-box">
@@ -75,6 +82,19 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
     </div>
   </div>
 
+  <!-- LOBBY WAIT (호스트가 시작 누를때까지 대기) -->
+  <div id="lobby-wait-screen" style="display:none;">
+    <div class="card">
+      <div class="lobby-wait">
+        <span class="pulse-ball">⚽</span>
+        <h2>게임 시작 대기 중</h2>
+        <p>호스트가 게임을 시작하면<br>자동으로 시작됩니다!</p>
+        <div style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.4);" id="wait-room-label"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
   <div id="main-screen" style="display:none;">
     <div class="score-big"><div class="pts" id="my-pts">0</div><div class="lbl">내 점수</div></div>
     <div class="tab-nav">
@@ -84,7 +104,7 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
       <button class="tab-btn" id="tab-qa"><span class="tab-icon">💬</span>Q&amp;A</button>
     </div>
     <div id="panel-quiz" class="panel active">
-      <div class="card" id="quiz-card"><div class="waiting"><span class="spin">⚽</span>호스트 퀴즈 대기 중...</div></div>
+      <div class="card" id="quiz-card"><div class="waiting"><span class="spin">⚽</span>퀴즈 대기 중...</div></div>
     </div>
     <div id="panel-vote" class="panel">
       <div class="card">
@@ -119,39 +139,26 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 <div id="toast"></div>
 
 <script>
-// ── Firebase REST (no SDK) ────────────────────────────────────
 var DB = "https://fil2-worldcup-default-rtdb.firebaseio.com";
-function dbSet(path, data) {
-  fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});
-}
-function dbGet(path, cb) {
-  fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(cb).catch(function(){});
-}
-function dbPush(path, data) {
-  fetch(DB+"/"+path+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});
-}
-function dbTx(path, fn) {
-  dbGet(path, function(cur){ dbSet(path, fn(cur)); });
-}
-function dbListen(path, cb) {
-  var last = null;
-  function poll() {
-    fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){
-      var s=JSON.stringify(d); if(s!==last){last=s;cb(d);}
-    }).catch(function(){});
-  }
-  poll();
-  return setInterval(poll, 2000);
+function dbSet(path,data){fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});}
+function dbGet(path,cb){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(cb).catch(function(){});}
+function dbPush(path,data){fetch(DB+"/"+path+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});}
+function dbTx(path,fn){dbGet(path,function(cur){dbSet(path,fn(cur));});}
+function dbListen(path,cb){
+  var last=null;
+  function poll(){fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){var s=JSON.stringify(d);if(s!==last){last=s;cb(d);}}).catch(function(){});}
+  poll(); return setInterval(poll,2000);
 }
 
-var voteOptions = [
+var voteOptions=[
   {name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},
   {name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},
   {name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}
 ];
 var roomId="",myUid="",myName="",hasAnswered=false,hasVoted=false,lastQIdx=-1;
+var gameStartListenerInt=null;
 
-function getParam(n){var m=window.location.search.match(new RegExp("[?&]"+n+"=([^&]*)"));return m?decodeURIComponent(m[1]):"";}
+function getParam(n){var m=window.location.search.match(new RegExp("[?&]"+n+"=([^&]*)"));return m?decodeURIComponent(m[1]):""; }
 var urlRoom=getParam("room");
 if(urlRoom) document.getElementById("join-room").value=urlRoom;
 
@@ -174,20 +181,42 @@ function joinRoom(){
   if(!r){showErr("방 이름을 입력하세요");return;}
   if(!n){showErr("닉네임을 입력하세요");return;}
   roomId=r; myName=n; myUid=makeUid();
-  // test connection first
+
   fetch(DB+"/rooms/"+roomId+"/meta.json")
     .then(function(res){return res.json();})
     .then(function(d){
       if(!d){showErr("방을 찾을 수 없습니다. 방 이름을 확인하세요.");return;}
+      // 참여자 등록
       dbSet("rooms/"+roomId+"/users/"+myUid,{name:myName,joined:Date.now()});
       document.getElementById("join-screen").style.display="none";
-      document.getElementById("main-screen").style.display="block";
       document.getElementById("room-label").textContent="방: "+roomId+" | "+myName;
-      renderVoteBtns();
-      listenAll();
-      showToast("입장 완료! 안녕하세요 "+myName+"님 👋");
+
+      if(d.gameStarted){
+        // 이미 시작된 방
+        enterGame();
+      } else {
+        // 로비 대기
+        document.getElementById("lobby-wait-screen").style.display="block";
+        document.getElementById("wait-room-label").textContent="방: "+roomId+" · "+myName+"님 입장 완료";
+        showToast("입장 완료! 호스트 시작을 기다려주세요 👋");
+        // 게임 시작 감지
+        gameStartListenerInt = dbListen("rooms/"+roomId+"/meta/gameStarted",function(val){
+          if(val===true){
+            clearInterval(gameStartListenerInt);
+            document.getElementById("lobby-wait-screen").style.display="none";
+            enterGame();
+            showToast("🟢 게임 시작!");
+          }
+        });
+      }
     })
-    .catch(function(e){showErr("연결 실패. 네트워크를 확인하세요: "+e.message);});
+    .catch(function(e){showErr("연결 실패: "+e.message);});
+}
+
+function enterGame(){
+  document.getElementById("main-screen").style.display="block";
+  renderVoteBtns();
+  listenAll();
 }
 
 function listenAll(){
@@ -202,18 +231,16 @@ function listenAll(){
 
 function onQuizUpdate(data){
   if(!data) return;
-  var card=document.getElementById("quiz-card");
-  if(!card) return;
+  var card=document.getElementById("quiz-card"); if(!card) return;
   if(data.qIdx!==lastQIdx){lastQIdx=data.qIdx;hasAnswered=false;}
   if(!data.open&&!data.showResult){
-    card.innerHTML="<div class='waiting'><span class='spin'>⚽</span>호스트 퀴즈 대기 중...</div>"; return;
+    card.innerHTML="<div class='waiting'><span class='spin'>⚽</span>다음 퀴즈 대기 중...</div>"; return;
   }
   if(data.open&&!hasAnswered){
     card.innerHTML="";
     var s=document.createElement("span");s.className="sect";s.textContent="⚽ 퀴즈 Q"+(data.qIdx+1);card.appendChild(s);
     var q=document.createElement("div");q.className="big-q";q.textContent=data.question;card.appendChild(q);
-    var tw=document.createElement("div");tw.className="timer-wrap";
-    tw.innerHTML="<div class='timer-num' id='p-timer'>20</div>";card.appendChild(tw);
+    var tw=document.createElement("div");tw.className="timer-wrap";tw.innerHTML="<div class='timer-num' id='p-timer'>20</div>";card.appendChild(tw);
     var labels=["A","B","C","D"];
     for(var i=0;i<data.options.length;i++){
       (function(idx){
@@ -232,11 +259,10 @@ function onQuizUpdate(data){
 }
 
 function submitAnswer(idx,qIdx,correct){
-  if(hasAnswered)return;
-  hasAnswered=true;
+  if(hasAnswered)return; hasAnswered=true;
   var btns=document.querySelectorAll(".opt-btn");
-  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
-  if(btns[idx])btns[idx].className+=(idx===correct?" correct":" wrong");
+  for(var i=0;i<btns.length;i++) btns[i].disabled=true;
+  if(btns[idx]) btns[idx].className+=(idx===correct?" correct":" wrong");
   dbSet("rooms/"+roomId+"/quiz/answers/"+qIdx+"/"+myUid,{answer:idx,name:myName,time:Date.now()});
   showToast(idx===correct?"✅ 정답! 점수 획득!":"❌ 틀렸어요!");
 }
@@ -256,11 +282,9 @@ function renderVoteBtns(){
 }
 
 function castVote(idx){
-  if(hasVoted)return;
-  hasVoted=true;
+  if(hasVoted)return; hasVoted=true;
   dbTx("rooms/"+roomId+"/vote/"+voteOptions[idx].name,function(cur){return(cur||0)+1;});
-  renderVoteBtns();
-  showToast("🗳 "+voteOptions[idx].name+"에 투표!");
+  renderVoteBtns(); showToast("🗳 "+voteOptions[idx].name+"에 투표!");
 }
 
 function submitWord(){
@@ -269,19 +293,15 @@ function submitWord(){
   if(!val){showToast("단어를 입력하세요");return;}
   if(val.length>10){showToast("10글자 이하로 입력하세요");return;}
   dbTx("rooms/"+roomId+"/words/"+val,function(cur){return(cur||0)+1;});
-  input.value="";
-  showToast("↑ \""+val+"\" 추가!");
+  input.value=""; showToast("↑ \""+val+"\" 추가!");
 }
 
 function submitQA(){
-  var ta=document.getElementById("qa-input");
-  var val=ta.value.trim();
+  var ta=document.getElementById("qa-input"); var val=ta.value.trim();
   if(!val){showToast("질문을 입력하세요");return;}
-  var now=new Date();
-  var ts=now.getHours()+":"+String(now.getMinutes()).padStart(2,"0");
+  var now=new Date(); var ts=now.getHours()+":"+String(now.getMinutes()).padStart(2,"0");
   dbPush("rooms/"+roomId+"/qa",{text:val,name:myName,likes:0,pinned:false,time:ts});
-  ta.value="";
-  showToast("📨 질문 제출 완료!");
+  ta.value=""; showToast("📨 질문 제출 완료!");
 }
 
 function switchTab(tab){
@@ -289,8 +309,8 @@ function switchTab(tab){
   for(var i=0;i<tabs.length;i++){
     var p=document.getElementById("panel-"+tabs[i]);
     var b=document.getElementById("tab-"+tabs[i]);
-    if(p)p.className="panel"+(tabs[i]===tab?" active":"");
-    if(b)b.className="tab-btn"+(tabs[i]===tab?" active":"");
+    if(p) p.className="panel"+(tabs[i]===tab?" active":"");
+    if(b) b.className="tab-btn"+(tabs[i]===tab?" active":"");
   }
 }
 </script>
