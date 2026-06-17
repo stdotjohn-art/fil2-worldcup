@@ -41,6 +41,9 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .rbar-fill { height:100%; border-radius:5px; transition:width 1s ease; }
 .rcnt { font-size:12px; color:rgba(255,255,255,0.5); margin-top:3px; }
 .btn-gold { display:block; width:100%; padding:13px; background:linear-gradient(135deg,#FFD700,#FFA000); color:#0a0f1e; border:none; border-radius:10px; font-size:15px; font-weight:800; cursor:pointer; margin-top:14px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.btn-gold:hover { opacity:0.85; }
+.btn-green { display:block; width:100%; padding:16px; background:linear-gradient(135deg,#00e676,#00897b); color:#fff; border:none; border-radius:12px; font-size:18px; font-weight:900; cursor:pointer; margin-top:14px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; letter-spacing:1px; }
+.btn-green:hover { opacity:0.85; }
 .btn-outline { display:inline-block; padding:9px 18px; background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.2); border-radius:8px; font-size:13px; cursor:pointer; margin-top:8px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .sc-row { display:table; width:100%; margin-bottom:10px; table-layout:fixed; }
 .sc-rank { display:table-cell; width:36px; font-size:18px; vertical-align:middle; text-align:center; }
@@ -74,11 +77,22 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 .setup-input { width:100%; padding:12px 16px; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); border-radius:10px; color:#fff; font-size:14px; outline:none; margin-bottom:10px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
 .setup-input:focus { border-color:#FFD700; }
 .err-box { background:rgba(255,82,82,0.15); border:1px solid #ff5252; border-radius:10px; padding:12px 16px; margin-bottom:14px; font-size:13px; color:#ff8a80; display:none; }
+/* LOBBY */
+.lobby-box { text-align:center; padding:30px 20px; }
+.lobby-box h2 { font-size:22px; font-weight:900; color:#FFD700; margin-bottom:8px; }
+.lobby-box p { color:rgba(255,255,255,0.5); font-size:13px; margin-bottom:20px; }
+.player-list { display:block; margin:16px 0; min-height:60px; }
+.player-chip { display:inline-block; background:rgba(255,215,0,0.12); border:1px solid rgba(255,215,0,0.3); border-radius:20px; padding:6px 14px; margin:4px; font-size:13px; font-weight:700; color:#FFD700; animation:popIn 0.3s ease; }
+@keyframes popIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+.waiting-anim { font-size:28px; animation:spin 2s linear infinite; display:inline-block; }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div id="app">
+
+  <!-- SETUP -->
   <div id="setup-screen">
     <div class="header">
       <h1>🏆 FIL2 WORLD CUP SLIDES</h1>
@@ -86,13 +100,36 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
     </div>
     <div id="err-box" class="err-box"></div>
     <div class="setup-box">
-      <h2>🔧 세션 시작</h2>
-      <p>방 이름을 입력하세요.<br>팀원들이 같은 방 이름으로 참여합니다.</p>
+      <h2>🔧 세션 만들기</h2>
+      <p>방 이름을 입력하고 세션을 시작하세요.<br>팀원들이 참여하면 게임을 시작할 수 있습니다.</p>
       <input class="setup-input" id="room-input" type="text" placeholder="방 이름 (예: FIL2-2026)" maxlength="20">
-      <button class="btn-gold" id="start-btn">🚀 세션 시작</button>
+      <button class="btn-gold" id="start-btn">🚀 세션 만들기</button>
     </div>
   </div>
 
+  <!-- LOBBY -->
+  <div id="lobby-screen" style="display:none;">
+    <div class="header">
+      <h1>🏆 FIL2 WORLD CUP SLIDES</h1>
+      <p id="lobby-room-label">대기 중...</p>
+    </div>
+    <div class="card">
+      <div class="lobby-box">
+        <div class="waiting-anim">⚽</div>
+        <h2 style="margin-top:12px;">참여자 대기 중</h2>
+        <p>팀원들이 player.html 에서 방 이름을 입력하면<br>아래에 표시됩니다</p>
+        <div class="player-list" id="player-list"><span style="color:rgba(255,255,255,0.2);font-size:13px;">아직 참여자 없음</span></div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px;"><span id="lobby-count">0</span>명 대기 중</div>
+        <button class="btn-green" id="game-start-btn">🟢 게임 시작!</button>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <span class="sect">참여자 접속 URL</span>
+      <div style="font-size:13px;color:#FFD700;word-break:break-all;padding:8px 0;" id="player-url"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
   <div id="main-screen" style="display:none;">
     <div class="header">
       <h1>🏆 FIL2 WORLD CUP SLIDES</h1>
@@ -161,339 +198,292 @@ body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e;
 <div id="toast"></div>
 
 <script>
-// ── Firebase REST API (no SDK, no CDN) ──────────────────────
 var DB = "https://fil2-worldcup-default-rtdb.firebaseio.com";
+var BASE_URL = "https://stdotjohn-art.github.io/fil2-worldcup";
 
 function dbSet(path, data, cb) {
-  fetch(DB + "/" + path + ".json", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  }).then(function(r) { return r.json(); })
-    .then(function(d) { if (cb) cb(null, d); })
-    .catch(function(e) { if (cb) cb(e); });
-}
-function dbPush(path, data, cb) {
-  fetch(DB + "/" + path + ".json", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  }).then(function(r) { return r.json(); })
-    .then(function(d) { if (cb) cb(null, d); })
-    .catch(function(e) { if (cb) cb(e); });
+  fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
+    .then(function(r){return r.json();}).then(function(d){if(cb)cb(null,d);}).catch(function(e){if(cb)cb(e);});
 }
 function dbGet(path, cb) {
-  fetch(DB + "/" + path + ".json")
-    .then(function(r) { return r.json(); })
-    .then(function(d) { cb(null, d); })
-    .catch(function(e) { cb(e); });
+  fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){cb(null,d);}).catch(function(e){cb(e);});
+}
+function dbPush(path, data) {
+  fetch(DB+"/"+path+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});
 }
 function dbRemove(path) {
-  fetch(DB + "/" + path + ".json", { method: "DELETE" }).catch(function(){});
+  fetch(DB+"/"+path+".json",{method:"DELETE"}).catch(function(){});
 }
-// polling listener
+function dbTx(path, fn) {
+  dbGet(path, function(err,cur){ dbSet(path, fn(cur)); });
+}
 function dbListen(path, cb) {
   var last = null;
   function poll() {
-    fetch(DB + "/" + path + ".json")
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        var s = JSON.stringify(d);
-        if (s !== last) { last = s; cb(d); }
-      }).catch(function(){});
+    fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){
+      var s=JSON.stringify(d); if(s!==last){last=s;cb(d);}
+    }).catch(function(){});
   }
   poll();
   return setInterval(poll, 2000);
 }
-// ── transaction: read then write ────────────────────────────
-function dbTx(path, fn) {
-  dbGet(path, function(err, cur) { dbSet(path, fn(cur)); });
-}
 
-// ── App Data ─────────────────────────────────────────────────
 var quizData = [
-  { q: "2026 월드컵 개최국은?", options: ["브라질","미국/캐나다/멕시코","독일","일본"], answer: 1 },
-  { q: "FIL2 팀의 핵심 역할은?", options: ["SSD 펌웨어 개발","AI 모델 트레이닝","웹 백엔드","하드웨어 설계"], answer: 0 },
-  { q: "다음 월드컵 우승 후보는?", options: ["프랑스","영국","포르투갈","스페인"], answer: 2 }
+  { q:"2026 월드컵 개최국은?", options:["브라질","미국/캐나다/멕시코","독일","일본"], answer:1 },
+  { q:"FIL2 팀의 핵심 역할은?", options:["SSD 펌웨어 개발","AI 모델 트레이닝","웹 백엔드","하드웨어 설계"], answer:0 },
+  { q:"다음 월드컵 우승 후보는?", options:["프랑스","영국","포르투갈","스페인"], answer:2 }
 ];
 var voteOptions = [
-  { name:"브라질",flag:"🇧🇷" },{ name:"프랑스",flag:"🇫🇷" },
-  { name:"독일",flag:"🇩🇪" }, { name:"스페인",flag:"🇪🇸" },
-  { name:"포르투갈",flag:"🇵🇹" },{ name:"영국",flag:"🏴" }
+  {name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},
+  {name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},
+  {name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}
 ];
 var wc_colors = ["#FFD700","#00e676","#2196F3","#FF6B35","#ab47bc","#26c6da","#f48fb1","#80cbc4"];
 var wc_sizes  = [14,18,22,28,34,40];
+var roomId="", currentQ=0, timerVal=20, timerInt=null;
 
-var roomId = "", currentQ = 0, timerVal = 20, timerInt = null;
-
-// ── Buttons ───────────────────────────────────────────────────
-document.getElementById("start-btn").addEventListener("click", startSession);
+document.getElementById("start-btn").addEventListener("click", createSession);
+document.getElementById("game-start-btn").addEventListener("click", startGame);
 document.getElementById("tab-quiz").addEventListener("click", function(){ switchTab("quiz"); });
 document.getElementById("tab-vote").addEventListener("click", function(){ switchTab("vote"); });
 document.getElementById("tab-wordcloud").addEventListener("click", function(){ switchTab("wordcloud"); });
 document.getElementById("tab-qa").addEventListener("click", function(){ switchTab("qa"); });
 
-// ── Session ───────────────────────────────────────────────────
-function startSession() {
+// ── 1단계: 세션 생성 → 로비 ─────────────────────────────────
+function createSession() {
   var v = document.getElementById("room-input").value.trim();
   if (!v) { showErr("방 이름을 입력하세요"); return; }
-  roomId = v.replace(/[^a-zA-Z0-9_-]/g, "_");
+  roomId = v.replace(/[^a-zA-Z0-9_-]/g,"_");
   var initVote = {};
-  for (var i = 0; i < voteOptions.length; i++) initVote[voteOptions[i].name] = 0;
+  for (var i=0;i<voteOptions.length;i++) initVote[voteOptions[i].name]=0;
 
-  dbSet("rooms/" + roomId + "/meta", { host: true, created: Date.now() }, function(err) {
-    if (err) { showErr("Firebase 오류: " + err.message + " (보안 규칙을 확인하세요)"); return; }
-    dbSet("rooms/" + roomId + "/vote", initVote);
+  dbSet("rooms/"+roomId+"/meta", { gameStarted:false, created:Date.now() }, function(err) {
+    if (err) { showErr("Firebase 오류: "+err.message); return; }
+    dbSet("rooms/"+roomId+"/vote", initVote);
+    // 로비 화면으로
     document.getElementById("setup-screen").style.display = "none";
-    document.getElementById("main-screen").style.display = "block";
-    document.getElementById("room-label").textContent = "HOST | 방: " + roomId;
-    document.getElementById("room-code-label").textContent = "방 코드: " + roomId;
-
-    document.getElementById("next-q-btn").addEventListener("click", nextQ);
-    document.getElementById("reset-vote-btn").addEventListener("click", resetVote);
-    document.getElementById("clear-words-btn").addEventListener("click", clearWords);
-
-    listenAll();
-    renderQuiz();
-    showToast("세션 시작! 방: " + roomId);
-  });
-}
-
-function listenAll() {
-  dbListen("rooms/" + roomId + "/users", function(d) {
-    document.getElementById("user-count").textContent = (d ? Object.keys(d).length : 0) + "명";
-  });
-  dbListen("rooms/" + roomId + "/vote",   function(d) { renderVoteBars(d); });
-  dbListen("rooms/" + roomId + "/words",  function(d) { renderWordCloud(d); });
-  dbListen("rooms/" + roomId + "/qa",     function(d) { renderQA(d); });
-  dbListen("rooms/" + roomId + "/scores", function(d) { renderScoreboard(d); });
-}
-
-function switchTab(tab) {
-  var tabs = ["quiz","vote","wordcloud","qa"];
-  for (var i = 0; i < tabs.length; i++) {
-    var p = document.getElementById("panel-" + tabs[i]);
-    var b = document.getElementById("tab-" + tabs[i]);
-    if (p) p.className = "panel" + (tabs[i] === tab ? " active" : "");
-    if (b) b.className = "tab-btn" + (tabs[i] === tab ? " active" : "");
-  }
-}
-
-// ── Quiz ─────────────────────────────────────────────────────
-function renderQuiz() {
-  var q = quizData[currentQ];
-  document.getElementById("q-num").textContent = currentQ + 1;
-  document.getElementById("q-tot").textContent = quizData.length;
-  document.getElementById("q-text").textContent = q.q;
-  var ul = document.getElementById("q-options");
-  ul.innerHTML = "";
-  var labels = ["A","B","C","D"];
-  for (var i = 0; i < q.options.length; i++) {
-    var li = document.createElement("li");
-    li.className = "opt-item" + (i === q.answer ? " correct" : "");
-    var sp = document.createElement("span");
-    sp.style.cssText = "font-weight:900;color:#FFD700;margin-right:10px;";
-    sp.textContent = labels[i];
-    li.appendChild(sp);
-    li.appendChild(document.createTextNode(q.options[i]));
-    ul.appendChild(li);
-  }
-  document.getElementById("q-result").style.display = "none";
-  dbRemove("rooms/" + roomId + "/quiz/answers/" + currentQ);
-  dbSet("rooms/" + roomId + "/quiz/current", {
-    qIdx: currentQ, open: true, showResult: false,
-    question: q.q, options: q.options, answer: q.answer
-  });
-  dbListen("rooms/" + roomId + "/quiz/answers/" + currentQ, renderAnswerBars);
-  startTimer();
-}
-
-function startTimer() {
-  clearInterval(timerInt);
-  timerVal = 20;
-  document.getElementById("timer").textContent = timerVal;
-  dbSet("rooms/" + roomId + "/quiz/timer", timerVal);
-  timerInt = setInterval(function() {
-    timerVal--;
-    var el = document.getElementById("timer");
-    if (el) el.textContent = timerVal;
-    dbSet("rooms/" + roomId + "/quiz/timer", timerVal);
-    if (timerVal <= 0) { clearInterval(timerInt); closeQuiz(); }
-  }, 1000);
-}
-
-function closeQuiz() {
-  dbSet("rooms/" + roomId + "/quiz/current/open", false);
-  dbSet("rooms/" + roomId + "/quiz/current/showResult", true);
-  document.getElementById("q-result").style.display = "block";
-  dbGet("rooms/" + roomId + "/quiz/answers/" + currentQ, function(err, data) {
-    if (!data) return;
-    var q = quizData[currentQ];
-    dbGet("rooms/" + roomId + "/scores", function(err2, scores) {
-      scores = scores || {};
-      for (var uid in data) {
-        if (!scores[uid]) scores[uid] = { name: data[uid].name || "익명", pts: 0 };
-        if (data[uid].answer === q.answer) scores[uid].pts += 100;
+    document.getElementById("lobby-screen").style.display = "block";
+    document.getElementById("lobby-room-label").textContent = "방: " + roomId + " | 참여자 대기 중...";
+    var pUrl = BASE_URL + "/player.html?room=" + encodeURIComponent(roomId);
+    document.getElementById("player-url").textContent = pUrl;
+    // 참여자 실시간 감지
+    dbListen("rooms/"+roomId+"/users", function(d) {
+      var players = d ? Object.keys(d) : [];
+      document.getElementById("lobby-count").textContent = players.length;
+      var list = document.getElementById("player-list");
+      list.innerHTML = "";
+      if (players.length === 0) {
+        list.innerHTML = "<span style='color:rgba(255,255,255,0.2);font-size:13px;'>아직 참여자 없음</span>";
+      } else {
+        for (var i=0;i<players.length;i++) {
+          var chip = document.createElement("span");
+          chip.className = "player-chip";
+          chip.textContent = "👤 " + (d[players[i]].name || players[i]);
+          list.appendChild(chip);
+        }
       }
-      dbSet("rooms/" + roomId + "/scores", scores);
     });
   });
 }
 
-function nextQ() {
-  currentQ = (currentQ + 1) % quizData.length;
+// ── 2단계: 호스트가 게임 시작 버튼 클릭 ────────────────────
+function startGame() {
+  dbSet("rooms/"+roomId+"/meta/gameStarted", true, function(err) {
+    if (err) { showToast("오류 발생!"); return; }
+    document.getElementById("lobby-screen").style.display = "none";
+    document.getElementById("main-screen").style.display = "block";
+    document.getElementById("room-label").textContent = "HOST | 방: " + roomId;
+    document.getElementById("room-code-label").textContent = "방 코드: " + roomId;
+    document.getElementById("next-q-btn").addEventListener("click", nextQ);
+    document.getElementById("reset-vote-btn").addEventListener("click", resetVote);
+    document.getElementById("clear-words-btn").addEventListener("click", clearWords);
+    listenAll();
+    renderQuiz();
+    showToast("🟢 게임 시작!");
+  });
+}
+
+function listenAll() {
+  dbListen("rooms/"+roomId+"/users", function(d) {
+    document.getElementById("user-count").textContent = (d?Object.keys(d).length:0)+"명";
+  });
+  dbListen("rooms/"+roomId+"/vote",   function(d){ renderVoteBars(d); });
+  dbListen("rooms/"+roomId+"/words",  function(d){ renderWordCloud(d); });
+  dbListen("rooms/"+roomId+"/qa",     function(d){ renderQA(d); });
+  dbListen("rooms/"+roomId+"/scores", function(d){ renderScoreboard(d); });
+}
+
+function switchTab(tab) {
+  var tabs=["quiz","vote","wordcloud","qa"];
+  for(var i=0;i<tabs.length;i++){
+    var p=document.getElementById("panel-"+tabs[i]);
+    var b=document.getElementById("tab-"+tabs[i]);
+    if(p) p.className="panel"+(tabs[i]===tab?" active":"");
+    if(b) b.className="tab-btn"+(tabs[i]===tab?" active":"");
+  }
+}
+
+function renderQuiz() {
+  var q=quizData[currentQ];
+  document.getElementById("q-num").textContent=currentQ+1;
+  document.getElementById("q-tot").textContent=quizData.length;
+  document.getElementById("q-text").textContent=q.q;
+  var ul=document.getElementById("q-options"); ul.innerHTML="";
+  var labels=["A","B","C","D"];
+  for(var i=0;i<q.options.length;i++){
+    var li=document.createElement("li");
+    li.className="opt-item"+(i===q.answer?" correct":"");
+    var sp=document.createElement("span");
+    sp.style.cssText="font-weight:900;color:#FFD700;margin-right:10px;";
+    sp.textContent=labels[i]; li.appendChild(sp);
+    li.appendChild(document.createTextNode(q.options[i]));
+    ul.appendChild(li);
+  }
+  document.getElementById("q-result").style.display="none";
+  dbRemove("rooms/"+roomId+"/quiz/answers/"+currentQ);
+  dbSet("rooms/"+roomId+"/quiz/current",{qIdx:currentQ,open:true,showResult:false,question:q.q,options:q.options,answer:q.answer});
+  dbListen("rooms/"+roomId+"/quiz/answers/"+currentQ, renderAnswerBars);
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInt); timerVal=20;
+  document.getElementById("timer").textContent=timerVal;
+  dbSet("rooms/"+roomId+"/quiz/timer",timerVal);
+  timerInt=setInterval(function(){
+    timerVal--;
+    var el=document.getElementById("timer"); if(el) el.textContent=timerVal;
+    dbSet("rooms/"+roomId+"/quiz/timer",timerVal);
+    if(timerVal<=0){clearInterval(timerInt);closeQuiz();}
+  },1000);
+}
+
+function closeQuiz() {
+  dbSet("rooms/"+roomId+"/quiz/current/open",false);
+  dbSet("rooms/"+roomId+"/quiz/current/showResult",true);
+  document.getElementById("q-result").style.display="block";
+  dbGet("rooms/"+roomId+"/quiz/answers/"+currentQ,function(err,data){
+    if(!data) return;
+    var q=quizData[currentQ];
+    dbGet("rooms/"+roomId+"/scores",function(err2,scores){
+      scores=scores||{};
+      for(var uid in data){
+        if(!scores[uid]) scores[uid]={name:data[uid].name||"익명",pts:0};
+        if(data[uid].answer===q.answer) scores[uid].pts+=100;
+      }
+      dbSet("rooms/"+roomId+"/scores",scores);
+    });
+  });
+}
+
+function nextQ(){
+  currentQ=(currentQ+1)%quizData.length;
   renderQuiz();
 }
 
 function renderAnswerBars(data) {
-  var bars = document.getElementById("q-result-bars");
-  if (!bars) return;
-  var q = quizData[currentQ];
-  var counts = [0,0,0,0];
-  if (data) { for (var uid in data) { var a = data[uid].answer; if (a >= 0 && a < 4) counts[a]++; } }
-  var total = counts.reduce(function(a,b){return a+b;},0) || 1;
-  var labels = ["A","B","C","D"];
-  bars.innerHTML = "";
-  for (var i = 0; i < q.options.length; i++) {
-    var pct = Math.round((counts[i]/total)*100);
-    var div = document.createElement("div");
-    div.style.marginBottom = "10px";
-    var lbl = document.createElement("div");
-    lbl.style.cssText = "font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px;";
-    lbl.textContent = labels[i] + ". " + q.options[i] + (i === q.answer ? " ★" : "");
-    var bw = document.createElement("div"); bw.className = "rbar-wrap";
-    var bf = document.createElement("div"); bf.className = "rbar-fill";
-    bf.style.width = pct + "%";
-    bf.style.background = i === q.answer ? "linear-gradient(90deg,#00e676,#00897b)" : "linear-gradient(90deg,#FFD700,#FFA000)";
+  var bars=document.getElementById("q-result-bars"); if(!bars) return;
+  var q=quizData[currentQ];
+  var counts=[0,0,0,0];
+  if(data){for(var uid in data){var a=data[uid].answer;if(a>=0&&a<4)counts[a]++;}}
+  var total=counts.reduce(function(a,b){return a+b;},0)||1;
+  var labels=["A","B","C","D"]; bars.innerHTML="";
+  for(var i=0;i<q.options.length;i++){
+    var pct=Math.round((counts[i]/total)*100);
+    var div=document.createElement("div"); div.style.marginBottom="10px";
+    var lbl=document.createElement("div"); lbl.style.cssText="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px;";
+    lbl.textContent=labels[i]+". "+q.options[i]+(i===q.answer?" ★":"");
+    var bw=document.createElement("div"); bw.className="rbar-wrap";
+    var bf=document.createElement("div"); bf.className="rbar-fill";
+    bf.style.width=pct+"%";
+    bf.style.background=i===q.answer?"linear-gradient(90deg,#00e676,#00897b)":"linear-gradient(90deg,#FFD700,#FFA000)";
     bw.appendChild(bf);
-    var cnt = document.createElement("div"); cnt.className = "rcnt";
-    cnt.textContent = counts[i] + "명 (" + pct + "%)";
-    div.appendChild(lbl); div.appendChild(bw); div.appendChild(cnt);
-    bars.appendChild(div);
+    var cnt=document.createElement("div"); cnt.className="rcnt"; cnt.textContent=counts[i]+"명 ("+pct+"%)";
+    div.appendChild(lbl); div.appendChild(bw); div.appendChild(cnt); bars.appendChild(div);
   }
 }
 
 function renderScoreboard(data) {
-  var el = document.getElementById("scoreboard");
-  if (!el || !data) return;
-  var arr = [];
-  for (var uid in data) arr.push(data[uid]);
+  var el=document.getElementById("scoreboard"); if(!el||!data) return;
+  var arr=[]; for(var uid in data) arr.push(data[uid]);
   arr.sort(function(a,b){return b.pts-a.pts;});
-  var medals = ["🥇","🥈","🥉","4","5","6","7","8"];
-  var maxPts = arr[0] ? arr[0].pts : 1;
-  el.innerHTML = "";
-  for (var i = 0; i < arr.length && i < 8; i++) {
-    var pct = Math.round((arr[i].pts/maxPts)*100);
-    var row = document.createElement("div"); row.className = "sc-row";
-    row.innerHTML = "<div class='sc-rank'>" + (medals[i]||i+1) + "</div>" +
-      "<div class='sc-name'>" + (arr[i].name||"익명") + "</div>" +
-      "<div class='sc-bar-cell'><div class='sc-bar' style='width:" + pct + "%'></div></div>" +
-      "<div class='sc-pts'>" + arr[i].pts + "pt</div>";
+  var medals=["🥇","🥈","🥉","4","5","6","7","8"]; var maxPts=arr[0]?arr[0].pts:1;
+  el.innerHTML="";
+  for(var i=0;i<arr.length&&i<8;i++){
+    var pct=Math.round((arr[i].pts/maxPts)*100);
+    var row=document.createElement("div"); row.className="sc-row";
+    row.innerHTML="<div class='sc-rank'>"+(medals[i]||i+1)+"</div><div class='sc-name'>"+(arr[i].name||"익명")+"</div><div class='sc-bar-cell'><div class='sc-bar' style='width:"+pct+"%'></div></div><div class='sc-pts'>"+arr[i].pts+"pt</div>";
     el.appendChild(row);
   }
 }
 
-// ── Vote ─────────────────────────────────────────────────────
 function renderVoteBars(data) {
-  var el = document.getElementById("vote-bars");
-  if (!el) return;
-  data = data || {};
-  var total = 0;
-  for (var i = 0; i < voteOptions.length; i++) total += (data[voteOptions[i].name]||0);
-  if (!total) total = 1;
-  el.innerHTML = "";
-  for (var i = 0; i < voteOptions.length; i++) {
-    var v = data[voteOptions[i].name]||0;
-    var pct = Math.round((v/total)*100);
-    var div = document.createElement("div"); div.className = "vi";
-    div.innerHTML = "<div class='vrow'><div class='vflag'>" + voteOptions[i].flag +
-      "</div><div class='vname'>" + voteOptions[i].name +
-      "</div><div class='vcnt'>" + v + "표</div></div>" +
-      "<div class='vbar-wrap'><div class='vbar-fill' style='width:" + pct + "%'></div></div>";
+  var el=document.getElementById("vote-bars"); if(!el) return;
+  data=data||{}; var total=0;
+  for(var i=0;i<voteOptions.length;i++) total+=(data[voteOptions[i].name]||0);
+  if(!total) total=1; el.innerHTML="";
+  for(var i=0;i<voteOptions.length;i++){
+    var v=data[voteOptions[i].name]||0; var pct=Math.round((v/total)*100);
+    var div=document.createElement("div"); div.className="vi";
+    div.innerHTML="<div class='vrow'><div class='vflag'>"+voteOptions[i].flag+"</div><div class='vname'>"+voteOptions[i].name+"</div><div class='vcnt'>"+v+"표</div></div><div class='vbar-wrap'><div class='vbar-fill' style='width:"+pct+"%'></div></div>";
     el.appendChild(div);
   }
 }
 
 function resetVote() {
-  var d = {};
-  for (var i = 0; i < voteOptions.length; i++) d[voteOptions[i].name] = 0;
-  dbSet("rooms/" + roomId + "/vote", d);
-  dbRemove("rooms/" + roomId + "/voted");
+  var d={}; for(var i=0;i<voteOptions.length;i++) d[voteOptions[i].name]=0;
+  dbSet("rooms/"+roomId+"/vote",d); dbRemove("rooms/"+roomId+"/voted");
   showToast("투표 초기화 완료!");
 }
 
-// ── Word Cloud ───────────────────────────────────────────────
 function renderWordCloud(data) {
-  var el = document.getElementById("wc-display");
-  if (!el) return;
-  if (!data) { el.innerHTML = "<span style='color:rgba(255,255,255,0.2);font-size:14px;'>참여자 단어 대기 중...</span>"; return; }
-  var words = [];
-  for (var w in data) words.push({ text: w, count: data[w] });
-  words.sort(function(a,b){return b.count-a.count;});
-  el.innerHTML = "";
-  for (var i = 0; i < words.length; i++) {
-    var span = document.createElement("span"); span.className = "wc-word";
-    span.textContent = words[i].text;
-    var si = Math.min(words[i].count-1, wc_sizes.length-1);
-    span.style.fontSize = wc_sizes[si] + "px";
-    span.style.color = wc_colors[i % wc_colors.length];
-    span.style.border = "1px solid " + wc_colors[i % wc_colors.length];
-    el.appendChild(span);
+  var el=document.getElementById("wc-display"); if(!el) return;
+  if(!data){el.innerHTML="<span style='color:rgba(255,255,255,0.2);font-size:14px;'>참여자 단어 대기 중...</span>";return;}
+  var words=[]; for(var w in data) words.push({text:w,count:data[w]});
+  words.sort(function(a,b){return b.count-a.count;}); el.innerHTML="";
+  for(var i=0;i<words.length;i++){
+    var span=document.createElement("span"); span.className="wc-word";
+    span.textContent=words[i].text;
+    var si=Math.min(words[i].count-1,wc_sizes.length-1);
+    span.style.fontSize=wc_sizes[si]+"px"; span.style.color=wc_colors[i%wc_colors.length];
+    span.style.border="1px solid "+wc_colors[i%wc_colors.length]; el.appendChild(span);
   }
 }
 
-function clearWords() {
-  dbRemove("rooms/" + roomId + "/words");
-  showToast("워드 클라우드 초기화!");
-}
+function clearWords(){ dbRemove("rooms/"+roomId+"/words"); showToast("워드 클라우드 초기화!"); }
 
-// ── Q&A ──────────────────────────────────────────────────────
 function renderQA(data) {
-  var el = document.getElementById("qa-list");
-  if (!el) return;
-  if (!data) { el.innerHTML = "<div style='color:rgba(255,255,255,0.3);font-size:13px;'>질문 대기 중...</div>"; return; }
-  var arr = [];
-  for (var k in data) arr.push({ key: k, d: data[k] });
+  var el=document.getElementById("qa-list"); if(!el) return;
+  if(!data){el.innerHTML="<div style='color:rgba(255,255,255,0.3);font-size:13px;'>질문 대기 중...</div>";return;}
+  var arr=[]; for(var k in data) arr.push({key:k,d:data[k]});
   arr.sort(function(a,b){
-    if (a.d.pinned && !b.d.pinned) return -1;
-    if (!a.d.pinned && b.d.pinned) return 1;
+    if(a.d.pinned&&!b.d.pinned) return -1; if(!a.d.pinned&&b.d.pinned) return 1;
     return (b.d.likes||0)-(a.d.likes||0);
   });
-  el.innerHTML = "";
-  for (var i = 0; i < arr.length; i++) {
-    (function(item) {
-      var div = document.createElement("div");
-      div.className = "qa-item" + (item.d.pinned ? " pinned" : "");
-      var td = document.createElement("div"); td.className = "qa-text";
-      if (item.d.pinned) { var b = document.createElement("span"); b.className = "pin-badge"; b.textContent = "📌 핀"; td.appendChild(b); }
+  el.innerHTML="";
+  for(var i=0;i<arr.length;i++){
+    (function(item){
+      var div=document.createElement("div"); div.className="qa-item"+(item.d.pinned?" pinned":"");
+      var td=document.createElement("div"); td.className="qa-text";
+      if(item.d.pinned){var b=document.createElement("span");b.className="pin-badge";b.textContent="📌 핀";td.appendChild(b);}
       td.appendChild(document.createTextNode(item.d.text));
-      var md = document.createElement("div"); md.className = "qa-meta";
-      var ti = document.createElement("div"); ti.className = "qa-time";
-      ti.textContent = (item.d.name||"익명") + " · " + (item.d.time||"");
-      var ac = document.createElement("div"); ac.className = "qa-acts";
-      var lb = document.createElement("button"); lb.className = "qa-btn";
-      lb.textContent = "❤ " + (item.d.likes||0);
-      lb.addEventListener("click", (function(k,l){ return function(){ dbSet("rooms/"+roomId+"/qa/"+k+"/likes",l+1); }; })(item.key, item.d.likes||0));
-      var pb = document.createElement("button"); pb.className = "qa-btn";
-      pb.textContent = item.d.pinned ? "📌 해제" : "📌 핀";
-      pb.addEventListener("click", (function(k,p){ return function(){ dbSet("rooms/"+roomId+"/qa/"+k+"/pinned",!p); }; })(item.key, item.d.pinned));
-      var xb = document.createElement("button"); xb.className = "qa-btn";
-      xb.textContent = "🗑";
-      xb.addEventListener("click", (function(k){ return function(){ dbRemove("rooms/"+roomId+"/qa/"+k); }; })(item.key));
+      var md=document.createElement("div"); md.className="qa-meta";
+      var ti=document.createElement("div"); ti.className="qa-time"; ti.textContent=(item.d.name||"익명")+" · "+(item.d.time||"");
+      var ac=document.createElement("div"); ac.className="qa-acts";
+      var lb=document.createElement("button"); lb.className="qa-btn"; lb.textContent="❤ "+(item.d.likes||0);
+      lb.addEventListener("click",(function(k,l){return function(){dbSet("rooms/"+roomId+"/qa/"+k+"/likes",l+1);};})(item.key,item.d.likes||0));
+      var pb=document.createElement("button"); pb.className="qa-btn"; pb.textContent=item.d.pinned?"📌 해제":"📌 핀";
+      pb.addEventListener("click",(function(k,p){return function(){dbSet("rooms/"+roomId+"/qa/"+k+"/pinned",!p);};})(item.key,item.d.pinned));
+      var xb=document.createElement("button"); xb.className="qa-btn"; xb.textContent="🗑";
+      xb.addEventListener("click",(function(k){return function(){dbRemove("rooms/"+roomId+"/qa/"+k);};})(item.key));
       ac.appendChild(lb); ac.appendChild(pb); ac.appendChild(xb);
-      md.appendChild(ti); md.appendChild(ac);
-      div.appendChild(td); div.appendChild(md);
-      el.appendChild(div);
+      md.appendChild(ti); md.appendChild(ac); div.appendChild(td); div.appendChild(md); el.appendChild(div);
     })(arr[i]);
   }
 }
 
-// ── Helpers ───────────────────────────────────────────────────
-function showErr(msg) { var e = document.getElementById("err-box"); e.textContent = msg; e.style.display = "block"; }
-function showToast(msg) {
-  var t = document.getElementById("toast"); t.textContent = msg; t.className = "show";
-  setTimeout(function(){ t.className = ""; }, 2500);
-}
+function showErr(msg){var e=document.getElementById("err-box");e.textContent=msg;e.style.display="block";}
+function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.className="show";setTimeout(function(){t.className="";},2500);}
 </script>
 </body>
 </html>
