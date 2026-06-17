@@ -254,36 +254,48 @@ function createSession() {
   var v = document.getElementById("room-input").value.trim();
   if (!v) { showErr("방 이름을 입력하세요"); return; }
   roomId = v.replace(/[^a-zA-Z0-9_-]/g,"_");
-  var initVote = {};
-  for (var i=0;i<voteOptions.length;i++) initVote[voteOptions[i].name]=0;
 
-  dbSet("rooms/"+roomId+"/meta", { gameStarted:false, created:Date.now() }, function(err) {
-    if (err) { showErr("Firebase 오류: "+err.message); return; }
-    dbSet("rooms/"+roomId+"/vote", initVote);
-    // 로비 화면으로
-    document.getElementById("setup-screen").style.display = "none";
-    document.getElementById("lobby-screen").style.display = "block";
-    document.getElementById("lobby-room-label").textContent = "방: " + roomId + " | 참여자 대기 중...";
-    var pUrl = BASE_URL + "/player.html?room=" + encodeURIComponent(roomId);
-    document.getElementById("player-url").textContent = pUrl;
-    // 참여자 실시간 감지
-    dbListen("rooms/"+roomId+"/users", function(d) {
-      var players = d ? Object.keys(d) : [];
-      document.getElementById("lobby-count").textContent = players.length;
-      var list = document.getElementById("player-list");
-      list.innerHTML = "";
-      if (players.length === 0) {
-        list.innerHTML = "<span style='color:rgba(255,255,255,0.2);font-size:13px;'>아직 참여자 없음</span>";
-      } else {
-        for (var i=0;i<players.length;i++) {
-          var chip = document.createElement("span");
-          chip.className = "player-chip";
-          chip.textContent = "👤 " + (d[players[i]].name || players[i]);
-          list.appendChild(chip);
+  // 기존 방 데이터 완전 삭제 후 새로 시작
+  fetch(DB+"/rooms/"+roomId+".json", {method:"DELETE"})
+    .then(function() {
+      var iv = {};
+      for (var i=0;i<voteOptions.length;i++) iv[voteOptions[i].name]=0;
+      return fetch(DB+"/rooms/"+roomId+"/meta.json",{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({gameStarted:false, created:Date.now()})
+      });
+    })
+    .then(function(r){ return r.json(); })
+    .then(function() {
+      var iv2={};
+      for(var i=0;i<voteOptions.length;i++) iv2[voteOptions[i].name]=0;
+      dbSet("rooms/"+roomId+"/vote", iv2);
+      // 로비 화면으로
+      document.getElementById("setup-screen").style.display = "none";
+      document.getElementById("lobby-screen").style.display = "block";
+      document.getElementById("lobby-room-label").textContent = "방: " + roomId + " | 참여자 대기 중...";
+      var pUrl = BASE_URL + "/player.html?room=" + encodeURIComponent(roomId);
+      document.getElementById("player-url").textContent = pUrl;
+      // 참여자 실시간 감지
+      dbListen("rooms/"+roomId+"/users", function(d) {
+        var players = d ? Object.keys(d) : [];
+        document.getElementById("lobby-count").textContent = players.length;
+        var list = document.getElementById("player-list");
+        list.innerHTML = "";
+        if (players.length === 0) {
+          list.innerHTML = "<span style='color:rgba(255,255,255,0.2);font-size:13px;'>아직 참여자 없음</span>";
+        } else {
+          for (var i=0;i<players.length;i++) {
+            var chip = document.createElement("span");
+            chip.className = "player-chip";
+            chip.textContent = "👤 " + (d[players[i]].name || players[i]);
+            list.appendChild(chip);
+          }
         }
-      }
-    });
-  });
+      });
+    })
+    .catch(function(e){ showErr("Firebase 오류: "+e.message); });
 }
 
 // ── 2단계: 호스트가 게임 시작 버튼 클릭 ────────────────────
