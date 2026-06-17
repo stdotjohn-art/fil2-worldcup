@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIL2 WorldCup - 참여자</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Malgun Gothic','Dotum',Arial,sans-serif; background:#0a0f1e; color:#fff; min-height:100vh; }
+.bg { position:fixed; top:0;left:0;right:0;bottom:0; z-index:0;
+  background: repeating-linear-gradient(90deg,rgba(0,120,40,0.12) 0px,rgba(0,160,60,0.06) 60px,rgba(0,100,30,0.12) 120px),
+  linear-gradient(180deg,#0a1a0a 0%,#0d2b10 40%,#0a1a0a 100%); }
+#app { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:16px; }
+.header { text-align:center; padding:20px 0 14px; }
+.header h1 { font-size:20px; font-weight:900; color:#FFD700; }
+.header p { color:rgba(255,255,255,0.4); font-size:12px; margin-top:3px; }
+.card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,215,0,0.2); border-radius:16px; padding:20px; margin-bottom:12px; }
+.sect { font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:1.5px; margin-bottom:10px; display:block; }
+.divider { height:1px; background:rgba(255,255,255,0.08); margin:14px 0; }
+.big-q { font-size:18px; font-weight:700; text-align:center; line-height:1.5; padding:12px 0; }
+.timer-wrap { text-align:center; margin:10px 0; }
+.timer-num { display:inline-block; width:56px; height:56px; border-radius:50%; line-height:56px; font-size:24px; font-weight:900; color:#FFD700; border:3px solid rgba(255,215,0,0.4); }
+.opt-btn { display:block; width:100%; padding:14px 18px; margin-bottom:10px; border-radius:12px; border:2px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#fff; font-size:15px; font-weight:600; cursor:pointer; text-align:left; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.opt-btn:hover { border-color:#FFD700; background:rgba(255,215,0,0.1); }
+.opt-btn.correct { border-color:#00e676; background:rgba(0,230,118,0.15); color:#00e676; }
+.opt-btn.wrong   { border-color:#ff5252; background:rgba(255,82,82,0.15); color:#ff5252; }
+.opt-label { display:inline-block; width:26px; height:26px; border-radius:50%; background:rgba(255,215,0,0.2); color:#FFD700; font-weight:900; font-size:12px; text-align:center; line-height:26px; margin-right:10px; }
+.vote-btn { display:block; width:100%; padding:13px; margin-bottom:10px; border-radius:12px; border:2px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#fff; font-size:15px; font-weight:700; cursor:pointer; text-align:center; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.vote-btn:hover { border-color:#2196F3; background:rgba(33,150,243,0.12); }
+.vote-btn.voted { border-color:#00BCD4; background:rgba(0,188,212,0.2); color:#00BCD4; }
+.wc-row { display:table; width:100%; border-collapse:separate; border-spacing:8px 0; margin-top:4px; }
+.wc-cell { display:table-cell; vertical-align:middle; }
+.wc-cell input { width:100%; padding:12px 14px; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); border-radius:10px; color:#fff; font-size:14px; outline:none; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.wc-cell input:focus { border-color:#FFD700; }
+.wc-btn { display:table-cell; width:80px; vertical-align:middle; }
+.wc-btn button { width:100%; padding:12px 4px; background:linear-gradient(135deg,#FFD700,#FFA000); color:#0a0f1e; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.qa-area { width:100%; padding:12px 14px; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); border-radius:10px; color:#fff; font-size:14px; resize:none; height:80px; outline:none; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.qa-area:focus { border-color:#FFD700; }
+.btn-gold { display:block; width:100%; padding:13px; background:linear-gradient(135deg,#FFD700,#FFA000); color:#0a0f1e; border:none; border-radius:10px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.setup-box { background:rgba(255,215,0,0.08); border:2px dashed rgba(255,215,0,0.4); border-radius:14px; padding:22px; text-align:center; }
+.setup-box h2 { color:#FFD700; font-size:18px; margin-bottom:10px; }
+.setup-box p { color:rgba(255,255,255,0.6); font-size:13px; line-height:1.7; margin-bottom:14px; }
+.setup-input { width:100%; padding:11px 14px; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); border-radius:10px; color:#fff; font-size:14px; outline:none; margin-bottom:8px; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.setup-input:focus { border-color:#FFD700; }
+.tab-nav { display:table; width:100%; border-collapse:collapse; margin:14px 0; background:rgba(255,255,255,0.05); border-radius:12px; overflow:hidden; border:1px solid rgba(255,215,0,0.2); }
+.tab-btn { display:table-cell; text-align:center; padding:11px 4px; cursor:pointer; font-size:12px; font-weight:700; color:rgba(255,255,255,0.5); border:none; background:none; width:25%; font-family:'Malgun Gothic','Dotum',Arial,sans-serif; }
+.tab-btn.active { color:#0a0f1e; background:#FFD700; }
+.tab-icon { display:block; font-size:16px; margin-bottom:2px; }
+.panel { display:none; }
+.panel.active { display:block; }
+.waiting { text-align:center; padding:30px; color:rgba(255,255,255,0.3); font-size:14px; }
+.spin { font-size:32px; animation:spin 2s linear infinite; display:block; margin-bottom:10px; }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.score-big { text-align:center; padding:14px; }
+.score-big .pts { font-size:44px; font-weight:900; color:#FFD700; }
+.score-big .lbl { font-size:12px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.err-box { background:rgba(255,82,82,0.15); border:1px solid #ff5252; border-radius:10px; padding:12px 16px; margin-bottom:12px; font-size:13px; color:#ff8a80; display:none; }
+#toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(255,215,0,0.95); color:#0a0f1e; padding:10px 20px; border-radius:20px; font-weight:800; font-size:13px; transition:transform 0.4s; z-index:9999; white-space:nowrap; }
+#toast.show { transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div id="app">
+  <div class="header"><h1>⚽ FIL2 WorldCup</h1><p id="room-label">참여자 화면</p></div>
+
+  <div id="join-screen">
+    <div id="err-box" class="err-box"></div>
+    <div class="setup-box">
+      <h2>👤 참여하기</h2>
+      <p>호스트가 알려준 방 이름과<br>내 닉네임을 입력하세요</p>
+      <input class="setup-input" id="join-room" type="text" placeholder="방 이름 (예: FIL2-2026)">
+      <input class="setup-input" id="join-name" type="text" placeholder="내 닉네임" maxlength="10">
+      <button class="btn-gold" id="join-btn">🚀 참여하기</button>
+    </div>
+  </div>
+
+  <div id="main-screen" style="display:none;">
+    <div class="score-big"><div class="pts" id="my-pts">0</div><div class="lbl">내 점수</div></div>
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tab-quiz"><span class="tab-icon">❓</span>QUIZ</button>
+      <button class="tab-btn" id="tab-vote"><span class="tab-icon">🗳</span>VOTE</button>
+      <button class="tab-btn" id="tab-wordcloud"><span class="tab-icon">☁</span>WORD</button>
+      <button class="tab-btn" id="tab-qa"><span class="tab-icon">💬</span>Q&amp;A</button>
+    </div>
+    <div id="panel-quiz" class="panel active">
+      <div class="card" id="quiz-card"><div class="waiting"><span class="spin">⚽</span>호스트 퀴즈 대기 중...</div></div>
+    </div>
+    <div id="panel-vote" class="panel">
+      <div class="card">
+        <span class="sect">⚽ 실시간 투표</span>
+        <div class="big-q">우승 후보가 가장 강한 팀은?</div>
+        <div class="divider"></div>
+        <div id="vote-btns"></div>
+      </div>
+    </div>
+    <div id="panel-wordcloud" class="panel">
+      <div class="card">
+        <span class="sect">☁ 워드 클라우드</span>
+        <div class="big-q">오늘 느낀 한 단어는?</div>
+        <div class="divider"></div>
+        <div class="wc-row">
+          <div class="wc-cell"><input type="text" id="wc-input" placeholder="단어 입력..." maxlength="10"></div>
+          <div class="wc-btn"><button id="wc-btn">제출</button></div>
+        </div>
+      </div>
+    </div>
+    <div id="panel-qa" class="panel">
+      <div class="card">
+        <span class="sect">💬 Q&amp;A</span>
+        <div class="big-q">팀에게 묻고 싶은 것은?</div>
+        <div class="divider"></div>
+        <textarea class="qa-area" id="qa-input" placeholder="질문을 입력하세요..."></textarea>
+        <button class="btn-gold" id="qa-btn">질문 제출 📨</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ── Firebase REST (no SDK) ────────────────────────────────────
+var DB = "https://fil2-worldcup-default-rtdb.firebaseio.com";
+function dbSet(path, data) {
+  fetch(DB+"/"+path+".json",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});
+}
+function dbGet(path, cb) {
+  fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(cb).catch(function(){});
+}
+function dbPush(path, data) {
+  fetch(DB+"/"+path+".json",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(function(){});
+}
+function dbTx(path, fn) {
+  dbGet(path, function(cur){ dbSet(path, fn(cur)); });
+}
+function dbListen(path, cb) {
+  var last = null;
+  function poll() {
+    fetch(DB+"/"+path+".json").then(function(r){return r.json();}).then(function(d){
+      var s=JSON.stringify(d); if(s!==last){last=s;cb(d);}
+    }).catch(function(){});
+  }
+  poll();
+  return setInterval(poll, 2000);
+}
+
+var voteOptions = [
+  {name:"브라질",flag:"🇧🇷"},{name:"프랑스",flag:"🇫🇷"},
+  {name:"독일",flag:"🇩🇪"},{name:"스페인",flag:"🇪🇸"},
+  {name:"포르투갈",flag:"🇵🇹"},{name:"영국",flag:"🏴"}
+];
+var roomId="",myUid="",myName="",hasAnswered=false,hasVoted=false,lastQIdx=-1;
+
+function getParam(n){var m=window.location.search.match(new RegExp("[?&]"+n+"=([^&]*)"));return m?decodeURIComponent(m[1]):"";}
+var urlRoom=getParam("room");
+if(urlRoom) document.getElementById("join-room").value=urlRoom;
+
+function makeUid(){return "u"+Date.now()+Math.floor(Math.random()*9999);}
+function showErr(msg){var e=document.getElementById("err-box");e.textContent=msg;e.style.display="block";}
+function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.className="show";setTimeout(function(){t.className="";},2500);}
+
+document.getElementById("join-btn").addEventListener("click",joinRoom);
+document.getElementById("tab-quiz").addEventListener("click",function(){switchTab("quiz");});
+document.getElementById("tab-vote").addEventListener("click",function(){switchTab("vote");});
+document.getElementById("tab-wordcloud").addEventListener("click",function(){switchTab("wordcloud");});
+document.getElementById("tab-qa").addEventListener("click",function(){switchTab("qa");});
+document.getElementById("wc-input").addEventListener("keypress",function(e){if(e.keyCode===13)submitWord();});
+document.getElementById("wc-btn").addEventListener("click",submitWord);
+document.getElementById("qa-btn").addEventListener("click",submitQA);
+
+function joinRoom(){
+  var r=document.getElementById("join-room").value.trim().replace(/[^a-zA-Z0-9_-]/g,"_");
+  var n=document.getElementById("join-name").value.trim();
+  if(!r){showErr("방 이름을 입력하세요");return;}
+  if(!n){showErr("닉네임을 입력하세요");return;}
+  roomId=r; myName=n; myUid=makeUid();
+  // test connection first
+  fetch(DB+"/rooms/"+roomId+"/meta.json")
+    .then(function(res){return res.json();})
+    .then(function(d){
+      if(!d){showErr("방을 찾을 수 없습니다. 방 이름을 확인하세요.");return;}
+      dbSet("rooms/"+roomId+"/users/"+myUid,{name:myName,joined:Date.now()});
+      document.getElementById("join-screen").style.display="none";
+      document.getElementById("main-screen").style.display="block";
+      document.getElementById("room-label").textContent="방: "+roomId+" | "+myName;
+      renderVoteBtns();
+      listenAll();
+      showToast("입장 완료! 안녕하세요 "+myName+"님 👋");
+    })
+    .catch(function(e){showErr("연결 실패. 네트워크를 확인하세요: "+e.message);});
+}
+
+function listenAll(){
+  dbListen("rooms/"+roomId+"/quiz/current",onQuizUpdate);
+  dbListen("rooms/"+roomId+"/quiz/timer",function(v){
+    var el=document.getElementById("p-timer"); if(el&&v!==null) el.textContent=v;
+  });
+  dbListen("rooms/"+roomId+"/scores/"+myUid+"/pts",function(v){
+    if(v!==null) document.getElementById("my-pts").textContent=v;
+  });
+}
+
+function onQuizUpdate(data){
+  if(!data) return;
+  var card=document.getElementById("quiz-card");
+  if(!card) return;
+  if(data.qIdx!==lastQIdx){lastQIdx=data.qIdx;hasAnswered=false;}
+  if(!data.open&&!data.showResult){
+    card.innerHTML="<div class='waiting'><span class='spin'>⚽</span>호스트 퀴즈 대기 중...</div>"; return;
+  }
+  if(data.open&&!hasAnswered){
+    card.innerHTML="";
+    var s=document.createElement("span");s.className="sect";s.textContent="⚽ 퀴즈 Q"+(data.qIdx+1);card.appendChild(s);
+    var q=document.createElement("div");q.className="big-q";q.textContent=data.question;card.appendChild(q);
+    var tw=document.createElement("div");tw.className="timer-wrap";
+    tw.innerHTML="<div class='timer-num' id='p-timer'>20</div>";card.appendChild(tw);
+    var labels=["A","B","C","D"];
+    for(var i=0;i<data.options.length;i++){
+      (function(idx){
+        var btn=document.createElement("button");btn.className="opt-btn";
+        var sp=document.createElement("span");sp.className="opt-label";sp.textContent=labels[idx];
+        btn.appendChild(sp);btn.appendChild(document.createTextNode(data.options[idx]));
+        btn.addEventListener("click",function(){submitAnswer(idx,data.qIdx,data.answer);});
+        card.appendChild(btn);
+      })(i);
+    }
+  }
+  if(!data.open&&data.showResult){
+    var btns=card.querySelectorAll(".opt-btn");
+    for(var i=0;i<btns.length;i++){btns[i].disabled=true;if(i===data.answer)btns[i].className+=" correct";}
+  }
+}
+
+function submitAnswer(idx,qIdx,correct){
+  if(hasAnswered)return;
+  hasAnswered=true;
+  var btns=document.querySelectorAll(".opt-btn");
+  for(var i=0;i<btns.length;i++)btns[i].disabled=true;
+  if(btns[idx])btns[idx].className+=(idx===correct?" correct":" wrong");
+  dbSet("rooms/"+roomId+"/quiz/answers/"+qIdx+"/"+myUid,{answer:idx,name:myName,time:Date.now()});
+  showToast(idx===correct?"✅ 정답! 점수 획득!":"❌ 틀렸어요!");
+}
+
+function renderVoteBtns(){
+  var el=document.getElementById("vote-btns");el.innerHTML="";
+  for(var i=0;i<voteOptions.length;i++){
+    (function(idx){
+      var btn=document.createElement("button");
+      btn.className="vote-btn"+(hasVoted?" voted":"");
+      btn.textContent=voteOptions[idx].flag+" "+voteOptions[idx].name;
+      btn.disabled=hasVoted;
+      btn.addEventListener("click",function(){castVote(idx);});
+      el.appendChild(btn);
+    })(i);
+  }
+}
+
+function castVote(idx){
+  if(hasVoted)return;
+  hasVoted=true;
+  dbTx("rooms/"+roomId+"/vote/"+voteOptions[idx].name,function(cur){return(cur||0)+1;});
+  renderVoteBtns();
+  showToast("🗳 "+voteOptions[idx].name+"에 투표!");
+}
+
+function submitWord(){
+  var input=document.getElementById("wc-input");
+  var val=input.value.trim();
+  if(!val){showToast("단어를 입력하세요");return;}
+  if(val.length>10){showToast("10글자 이하로 입력하세요");return;}
+  dbTx("rooms/"+roomId+"/words/"+val,function(cur){return(cur||0)+1;});
+  input.value="";
+  showToast("↑ \""+val+"\" 추가!");
+}
+
+function submitQA(){
+  var ta=document.getElementById("qa-input");
+  var val=ta.value.trim();
+  if(!val){showToast("질문을 입력하세요");return;}
+  var now=new Date();
+  var ts=now.getHours()+":"+String(now.getMinutes()).padStart(2,"0");
+  dbPush("rooms/"+roomId+"/qa",{text:val,name:myName,likes:0,pinned:false,time:ts});
+  ta.value="";
+  showToast("📨 질문 제출 완료!");
+}
+
+function switchTab(tab){
+  var tabs=["quiz","vote","wordcloud","qa"];
+  for(var i=0;i<tabs.length;i++){
+    var p=document.getElementById("panel-"+tabs[i]);
+    var b=document.getElementById("tab-"+tabs[i]);
+    if(p)p.className="panel"+(tabs[i]===tab?" active":"");
+    if(b)b.className="tab-btn"+(tabs[i]===tab?" active":"");
+  }
+}
+</script>
+</body>
+</html>
