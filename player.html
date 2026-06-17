@@ -240,7 +240,7 @@ function onQuizUpdate(data){
     card.innerHTML="";
     var s=document.createElement("span");s.className="sect";s.textContent="⚽ 퀴즈 Q"+(data.qIdx+1);card.appendChild(s);
     var q=document.createElement("div");q.className="big-q";q.textContent=data.question;card.appendChild(q);
-    var tw=document.createElement("div");tw.className="timer-wrap";tw.innerHTML="<div class='timer-num' id='p-timer'>20</div>";card.appendChild(tw);
+    var tw=document.createElement("div");tw.className="timer-wrap";tw.innerHTML="<div class='timer-num' id='p-timer'>7</div>";card.appendChild(tw);
     var labels=["A","B","C","D"];
     for(var i=0;i<data.options.length;i++){
       (function(idx){
